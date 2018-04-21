@@ -31,13 +31,13 @@ Background
 **********
 This software gets developed for the "Bee Observer" (BOB) project,
 a joint endeavour initiated by the
-`Cognitive neuroinformatics group at the University of Bremen <http://www.cognitive-neuroinformatics.com/en/>`
+`Cognitive neuroinformatics group at the University of Bremen <http://www.cognitive-neuroinformatics.com/en/>`_
 and the independent research and development group Hiveeyes, see also:
 
-- https://hiverize.org/
-- https://hiveeyes.org/
-- https://community.hiveeyes.org/t/bee-observer-bob-uni-bremen-und-hiveeyes-werden-als-citizen-science-projekte-vom-forschungsministerium-unterstutzt/454
-- https://community.hiveeyes.org/t/system-fur-kontinuierliche-audio-aufzeichnung-bob-projekt-phase-1/728
+- `hiverize.org - Vernetzt. Smart. Imkern. <https://hiverize.org/>`_
+- `The Hiveeyes Project <https://hiveeyes.org/>`_
+- `Bee Observer (BOB) - Uni Bremen und Hiveeyes werden als Citizen-Science-Projekte vom Forschungsministerium unterstützt <https://community.hiveeyes.org/t/bee-observer-bob-uni-bremen-und-hiveeyes-werden-als-citizen-science-projekte-vom-forschungsministerium-unterstutzt/454>`_
+- `System für kontinuierliche Audio-Aufzeichnung (BOB Projekt, Phase 1) <https://community.hiveeyes.org/t/system-fur-kontinuierliche-audio-aufzeichnung-bob-projekt-phase-1/728>`_
 
 
 ******************

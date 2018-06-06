@@ -68,7 +68,7 @@ Running
 ::
 
     source .venv36/bin/activate
-    python example.py
+    python src/python/example.py
 
 
 *******************

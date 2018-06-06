@@ -32,18 +32,18 @@ Background
 This software gets developed for the "Bee Observer" (BOB) project,
 a joint endeavour initiated by the
 `Cognitive neuroinformatics group at the University of Bremen <http://www.cognitive-neuroinformatics.com/en/>`_
-and the independent research and development group Hiveeyes, see also:
+and the people of the independent research and development project `Hiveeyes <https://hiveeyes.org/>`_, see also:
 
 - `hiverize.org - Vernetzt. Smart. Imkern. <https://hiverize.org/>`_
 - `The Hiveeyes Project <https://hiveeyes.org/>`_
-- `Bee Observer (BOB) - Uni Bremen und Hiveeyes werden als Citizen-Science-Projekte vom Forschungsministerium unterstützt <https://community.hiveeyes.org/t/bee-observer-bob-uni-bremen-und-hiveeyes-werden-als-citizen-science-projekte-vom-forschungsministerium-unterstutzt/454>`_
+- `Uni Bremen und Hiveeyes werden als Citizen-Science-Projekte vom Forschungsministerium unterstützt <https://community.hiveeyes.org/t/bee-observer-bob-uni-bremen-und-hiveeyes-werden-als-citizen-science-projekte-vom-forschungsministerium-unterstutzt/454>`_
 - `System für kontinuierliche Audio-Aufzeichnung (BOB Projekt, Phase 1) <https://community.hiveeyes.org/t/system-fur-kontinuierliche-audio-aufzeichnung-bob-projekt-phase-1/728>`_
 
 
 ******************
 State of the onion
 ******************
-THIS IS A WORK IN PROGRESS. THERE MIGHT BE DRAGONS.
+THIS IS A WORK IN PROGRESS. THERE MIGHT BE DRAGONS. YOU HAVE BEEN WARNED.
 
 The software is based on GStreamer_ and the `GStreamer Python Bindings`_,
 in turn using the fine PyGObject_ under the hood.
@@ -95,6 +95,11 @@ Code license
 Licensed under the GNU AGPL license. See LICENSE_ file for details.
 
 .. _LICENSE: https://github.com/hiveeyes/saraswati/blob/master/LICENSE
+
+
+----
+
+Have fun!
 
 
 .. _GStreamer: https://gstreamer.freedesktop.org/

@@ -19,6 +19,11 @@ class BasicPipeline:
         gst-launch-1.0 audiotestsrc ! alsasink
         gst-launch-1.0 audiotestsrc ! osxaudiosink
 
+    See also:
+
+    - https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html
+
+
     It is derived from these fine blueprints:
 
     - http://brettviren.github.io/pygst-tutorial-org/pygst-tutorial.html

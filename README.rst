@@ -56,19 +56,54 @@ have a look at OpenOB_.
 *****
 Setup
 *****
-Prerequisites::
+::
 
-    brew install gst-python gst-plugins-good
+    brew install gstreamer gst-python gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
+
+
+******
+Python
+******
+
+Setup
+=====
+::
+
     virtualenv --python=python3 --system-site-packages .venv36
 
 
-*******
 Running
-*******
+=======
 ::
 
     source .venv36/bin/activate
     python python/example.py
+
+
+****
+Rust
+****
+
+Setup
+=====
+::
+
+    brew install rust
+
+Running
+=======
+::
+
+    cd rust
+
+    # Listen to test signal on default output: sine, 440 Hz
+    cargo run --bin gstreamer-rs-launch audiotestsrc ! autoaudiosink
+
+    # Route default input (microphone) to default output
+    cargo run --bin gstreamer-rs-launch autoaudiosrc ! autoaudiosink
+
+    # Show all devices available on the system
+    cargo run --bin gstreamer-rs-device-monitor | jq .
 
 
 *******************

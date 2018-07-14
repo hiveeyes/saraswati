@@ -1,3 +1,7 @@
+GStreamer
+=========
+- https://cgit.freedesktop.org/gstreamer/
+
 Code snippets
 =============
 - https://github.com/brettviren/pygst-tutorial-org/blob/master/videomixer-example.py
@@ -13,3 +17,14 @@ Pads
 - https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/request.html
 - https://gstreamer.freedesktop.org/documentation/plugin-development/basics/pads.html
 - https://gstreamer.freedesktop.org/documentation/tutorials/basic/multithreading-and-pad-availability.html
+
+Rust
+====
+- https://github.com/sdroege/gstreamer-rs/
+- https://crates.io/crates/gstreamer
+- https://github.com/serde-rs/json
+
+Lua
+===
+- https://github.com/pavouk/lgi
+- https://gstreamer.freedesktop.org/projects/gstlua.html

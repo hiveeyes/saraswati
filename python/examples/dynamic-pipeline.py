@@ -16,8 +16,7 @@ class BasicPipeline:
     """
     This is the Python equivalent of::
 
-        gst-launch-1.0 audiotestsrc ! alsasink
-        gst-launch-1.0 audiotestsrc ! osxaudiosink
+        gst-launch-1.0 audiotestsrc ! autoaudiosink
 
     See also:
 
@@ -41,16 +40,11 @@ class BasicPipeline:
         # Create main event loop object
         self.mainloop = GObject.MainLoop()
 
-        # Compute sink element based on platform
-        # https://gstreamer.freedesktop.org/documentation/tutorials/basic/platform-specific-elements.html
-
         # Noop sink
         #self.sink_element = 'fakesink'
 
         # Speaker sink
-        self.sink_element = 'alsasink'
-        if sys.platform == 'darwin':
-            self.sink_element = 'osxaudiosink'
+        self.sink_element = 'autoaudiosink'
 
     def setup(self):
 

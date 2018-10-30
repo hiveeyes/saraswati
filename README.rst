@@ -1,12 +1,12 @@
 #########
-saraswati
+Saraswati
 #########
 
 
 *****
 About
 *****
-saraswati is a robust, multi-channel audio recording, transmission and storage system.
+Saraswati is a robust, multi-channel audio recording, transmission and storage system.
 
 It is designed to run on `Single-board computer (SBC)`_
 systems as well as larger machines.
@@ -56,54 +56,60 @@ have a look at OpenOB_.
 *****
 Setup
 *****
+
+Prerequisites
+=============
 ::
 
-    brew install gstreamer gst-python gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
+    brew install gstreamer gst-python libfft gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
 
-
-******
-Python
-******
 
 Setup
 =====
 ::
 
     virtualenv --python=python3 --system-site-packages .venv36
+    source .venv36/bin/activate
+
+    pip install pytz
+
+    export LDFLAGS="-L/usr/local/opt/libffi/lib"
+    export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
+    pip install pygobject
 
 
+
+*******
 Running
-=======
-::
+*******
+
+There's already a basic implementation to
+
+- ingest audio from GStreamer's `audiotestsrc`,
+- running it through `flacenc` to encode audio with
+  the FLAC lossless audio encoder, and
+- finally storing it using `splitmuxsink`, a GStreamer component which
+  multiplexes incoming streams into multiple time- or size-limited files
+
+Each audio fragment will be timestamped with the current date/time
+information in ISO-8601 format, using a qualified UTC offset of ``+0000``.
+
+Invoke example program::
 
     source .venv36/bin/activate
-    python python/example.py
+    python python/examples/flac-timestamp-chunked.py
 
+Example output::
 
-****
-Rust
-****
+    beehive_recording_2018-10-30T02:35:16+0000_0000.mkv
+    beehive_recording_2018-10-30T02:35:18+0000_0001.mkv
+    beehive_recording_2018-10-30T02:35:20+0000_0002.mkv
+    beehive_recording_2018-10-30T02:35:22+0000_0003.mkv
 
-Setup
-=====
-::
+Display segment metadata information embedded into the flile::
 
-    brew install rust
-
-Running
-=======
-::
-
-    cd rust
-
-    # Listen to test signal on default output: sine, 440 Hz
-    cargo run --bin gstreamer-rs-launch audiotestsrc ! autoaudiosink
-
-    # Route default input (microphone) to default output
-    cargo run --bin gstreamer-rs-launch autoaudiosrc ! autoaudiosink
-
-    # Show all devices available on the system
-    cargo run --bin gstreamer-rs-device-monitor | jq .
+    mkvinfo 'var/spool/beehive_recording_2018-10-30T05:48:48+0000_0000.mkv' | grep Date
+    | + Date: Tue Oct 30 05:48:48 2018 UTC
 
 
 *******************
@@ -112,7 +118,7 @@ Project information
 
 About
 =====
-The "saraswati" program is released under the GNU AGPL license.
+The "Saraswati" program is released under the GNU AGPL license.
 Its source code lives on `GitHub <https://github.com/hiveeyes/saraswati>`_ and
 the Python package is published to `PyPI <https://pypi.org/project/saraswati/>`_.
 You might also want to have a look at the `documentation <https://hiveeyes.org/docs/saraswati/>`_.

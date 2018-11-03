@@ -10,14 +10,14 @@ import pytz
 import logging
 from gi.repository import GObject, Gst
 from datetime import datetime
+from pkg_resources import parse_version
 
 logger = logging.getLogger(__name__)
 
 
-
 class BasicPipeline:
     """
-    This is the Python equivalent of::
+    This implements an audio encoding GStreamer pipeline in Python similar to this one::
 
         gst-launch-1.0 -e audiotestsrc ! flacenc ! flactag ! flacparse ! mux.audio_0 splitmuxsink muxer=matroskamux name=mux location="out_`date -u '+%Y-%m-%dT%H:%M:%S%z'`-%04d".mkv max-size-time=2500000000000
 
@@ -34,13 +34,13 @@ class BasicPipeline:
 
     def __init__(self):
 
-        logger.info('Starting PipelineTest')
+        logger.info('Starting audio recorder')
 
         # Create main event loop object
         self.mainloop = GObject.MainLoop()
 
         # Where to store the audio fragments
-        self.output_location = './var/spool/beehive_recording_{timestamp}_{fragment:04d}.mkv'
+        self.output_location = '/var/spool/saraswati/recording_{timestamp}_{fragment:04d}.mkv'
 
     def setup(self):
 
@@ -48,36 +48,33 @@ class BasicPipeline:
 
         # Create pipeline object
 
-        # Pure FLAC container
-        pipeline_expression = \
-            "audiotestsrc ! flacenc ! flactag ! flacparse ! " + \
-            "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time=1000000000000 max-files=10"
+        # How long should the audio chunks be?
+        # 10 seconds
+        chunklength = 10000000000
 
-        # Ogg Vorbis container
+        # 0. Select audio input
+        audio_input = 'audiotestsrc'
+        #audio_input = 'alsasrc device="hw:1"'
+
+        if audio_input == 'audiotestsrc':
+            chunklength *= 12.5
+
+        # 1. FLAC encoding and Matroska container
+        pipeline_expression = \
+            "{audio_input} ! flacenc ! flactag ! flacparse ! " + \
+            "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time={chunklength:.0f} max-files=10"
+
+        self.pipeline_expression = pipeline_expression.format(**locals())
+
+        # 2. Ogg Vorbis container
         # https://xiph.org/flac/faq.html#general__native_vs_ogg
         #pipeline_expression = \
-        #    "audiotestsrc ! progressreport ! vorbisenc name=encoder ! vorbistag name=tagger ! vorbisparse ! " + \
-        #    "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time=1000000000000 max-files=10"
-
-        # souphttpclientsink
-        # https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good/html/gst-plugins-good-plugins-souphttpclientsink.html
-        """
-        pipeline_expression = \
-            "audiotestsrc ! progressreport ! vorbisenc name=encoder ! vorbistag name=tagger ! vorbisparse ! " + \
-            "souphttpclientsink location=http://localhost:8080/filename.mkv"
-        """
-
-        pipeline_expression = \
-            "audiotestsrc ! progressreport ! vorbisenc name=encoder ! vorbistag name=tagger ! vorbisparse ! " + \
-            "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux sink=souphttpclientsink max-size-time=1000000000000 max-files=10 " + \
-            "location=http://localhost:8080/filename.mkv"
+        #    "audiotestsrc ! vorbisenc name=encoder ! vorbistag name=tagger ! vorbisparse ! " + \
+        #    "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time=1000000000 max-files=10"
 
 
-        # souphttpclientsink location=http://server/filename.ogv
-        # https://github.com/GStreamer/gst-plugins-good/blob/master/ext/soup/gstsouphttpclientsink.c
-
-        logger.info(pipeline_expression)
-        self.pipeline = Gst.parse_launch(pipeline_expression)
+        # Launch pipeline
+        self.pipeline = Gst.parse_launch(self.pipeline_expression)
 
         # Connect with bus
         bus = self.pipeline.get_bus()
@@ -89,11 +86,19 @@ class BasicPipeline:
         self.muxer = self.pipeline.get_by_name('muxer')
         if self.muxer:
             user_data = {'hello': 'bob'}
-            self.muxer.connect("format-location-full", self.on_format_location, user_data)
+
+            # Dispatch name computation callback by GStreamer version
+            signal_name = "format-location"
+            signal_callback = self.on_format_location
+            if parse_version(Gst.version_string()) >= parse_version('GStreamer 1.14.4'):
+                signal_name = "format-location-full"
+                signal_callback = self.on_format_location_full
+
+            self.muxer.connect(signal_name, signal_callback, user_data)
 
     # Running the shit
     def run(self):
-        logger.info('Running the pipeline')
+        logger.info('Launching pipeline: %s', self.pipeline_expression)
         self.pipeline.set_state(Gst.State.PLAYING)
         self.mainloop.run()
 
@@ -103,7 +108,7 @@ class BasicPipeline:
         structure = message.get_structure()
         if structure is None:
             return
-        logger.info('on_message: %s', structure.to_string())
+        #logger.info('on_message: %s', structure.to_string())
         #logger.debug('tag: %s', message.parse_tag())
 
         #logger.debug('message:   %s\n%s', message, dir(message))
@@ -126,7 +131,10 @@ class BasicPipeline:
             err, debug = message.parse_error()
             logger.error('{}: {}'.format(err, debug))
 
-    def on_format_location(self, splitmux, fragment_id, first_sample, user_data):
+    def on_format_location_full(self, splitmux, fragment_id, first_sample, user_data):
+        return self.on_format_location(splitmux, fragment_id, user_data)
+
+    def on_format_location(self, splitmux, fragment_id, user_data):
         """
         Callback for computing the output filename
         https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good/html/gst-plugins-good-plugins-splitmuxsink.html#GstSplitMuxSink-format-location-full
@@ -137,7 +145,7 @@ class BasicPipeline:
         user_data:      User data set when the signal handler was connected
         """
 
-        logger.info('on_format_location')
+        #logger.info('on_format_location')
         #print('tag:', splitmux.parse_tag())
 
         # Compute current timestamp (now) in ISO format, using UTC, with timezone offset

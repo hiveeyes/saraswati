@@ -46,32 +46,25 @@ class BasicPipeline:
 
         logger.info('Configuring the pipeline')
 
-        # Create pipeline object
+        # Configure audio pipeline
 
         # How long should the audio chunks be?
         # 10 seconds
         chunklength = 10000000000
 
-        # 0. Select audio input
+        # Audio input source
         audio_input = 'audiotestsrc'
         #audio_input = 'alsasrc device="hw:1"'
 
         if audio_input == 'audiotestsrc':
             chunklength *= 12.5
 
-        # 1. FLAC encoding and Matroska container
+        # Pipeline: Use FLAC encoder and Matroska container
         pipeline_expression = \
             "{audio_input} ! flacenc ! flactag ! flacparse ! " + \
             "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time={chunklength:.0f} max-files=10"
 
         self.pipeline_expression = pipeline_expression.format(**locals())
-
-        # 2. Ogg Vorbis container
-        # https://xiph.org/flac/faq.html#general__native_vs_ogg
-        #pipeline_expression = \
-        #    "audiotestsrc ! vorbisenc name=encoder ! vorbistag name=tagger ! vorbisparse ! " + \
-        #    "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time=1000000000 max-files=10"
-
 
         # Launch pipeline
         self.pipeline = Gst.parse_launch(self.pipeline_expression)

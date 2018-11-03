@@ -6,13 +6,14 @@ Saraswati
 *****
 About
 *****
-Saraswati is a robust, multi-channel audio recording, transmission and storage system.
+Saraswati is a robust, multi-channel audio recording,
+transmission and storage system.
 
 It is designed to run on `Single-board computer (SBC)`_
 systems as well as larger machines.
 
-It might become the designated work horse for flexible field recording
-of audio signals in environmental monitoring systems.
+It might become the designated work horse for flexible field
+recording of audio signals in environmental monitoring systems.
 
 We are an open community of scientists from different domains
 working collaboratively on this project. You are welcome to
@@ -32,7 +33,8 @@ Background
 This software gets developed for the "Bee Observer" (BOB) project,
 a joint endeavour initiated by the
 `Cognitive neuroinformatics group at the University of Bremen <http://www.cognitive-neuroinformatics.com/en/>`_
-and the people of the independent research and development project `Hiveeyes <https://hiveeyes.org/>`_, see also:
+and the people of the independent research and development project
+`Hiveeyes <https://hiveeyes.org/>`_, see also:
 
 - `hiverize.org - Vernetzt. Smart. Imkern. <https://hiverize.org/>`_
 - `The Hiveeyes Project <https://hiveeyes.org/>`_
@@ -48,34 +50,54 @@ THIS IS A WORK IN PROGRESS. THERE MIGHT BE DRAGONS. YOU HAVE BEEN WARNED.
 The software is based on GStreamer_ and the `GStreamer Python Bindings`_,
 in turn using the fine PyGObject_ under the hood.
 
-We will start with basic ``gst-python`` examples and will gradually
-improve the program to be production grade. We will definitively
-have a look at OpenOB_.
+The software was tested successfully with Python2, Python3,
+GStreamer 1.10.4 and GStreamer 1.14.4, on Linux and macOS.
 
 
 *****
 Setup
 *****
+Create the directory where Saraswati will store its files::
+
+    mkdir /var/spool/saraswati
+
 
 Prerequisites
 =============
+As Saraswati is based on GStreamer_ and ALSA_,
+let's install the relevant packages.
+
+
+Clone source repository
+-----------------------
 ::
 
-    brew install gstreamer gst-python libfft gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
+    # Install git
+    # {apt|brew} install git
+
+    # Run clone process
+    git clone https://github.com/hiveeyes/saraswati.git
 
 
-Setup
-=====
+Debian-based systems
+--------------------
+GStreamer::
+
+    apt install gstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
+
+Python 2.x::
+
+    apt install python python-gst-1.0 python-gi python-tz
+
+Python 3.x::
+
+    apt install python3 python3-gst-1.0 python3-gi python3-tz
+
+macOS systems
+-------------
 ::
 
-    virtualenv --python=python3 --system-site-packages .venv36
-    source .venv36/bin/activate
-
-    pip install pytz
-
-    export LDFLAGS="-L/usr/local/opt/libffi/lib"
-    export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
-    pip install pygobject
+    brew install gstreamer gst-python libfft gst-plugins-base gst-plugins-good gst-libav
 
 
 
@@ -85,10 +107,10 @@ Running
 
 There's already a basic implementation to
 
-- ingest audio from GStreamer's `audiotestsrc`,
-- running it through `flacenc` to encode audio with
+- ingest audio from GStreamer's ``audiotestsrc``,
+- running it through ``flacenc`` to encode audio with
   the FLAC lossless audio encoder, and
-- finally storing it using `splitmuxsink`, a GStreamer component which
+- finally storing it using ``splitmuxsink``, a GStreamer component which
   multiplexes incoming streams into multiple time- or size-limited files
 
 Each audio fragment will be timestamped with the current date/time
@@ -96,10 +118,9 @@ information in ISO-8601 format, using a qualified UTC offset of ``+0000``.
 
 Invoke example program::
 
-    source .venv36/bin/activate
     python python/examples/flac-timestamp-chunked.py
 
-Example output::
+Example output when being started at 03:35 CET::
 
     beehive_recording_2018-10-30T02:35:16+0000_0000.mkv
     beehive_recording_2018-10-30T02:35:18+0000_0001.mkv
@@ -123,7 +144,7 @@ Its source code lives on `GitHub <https://github.com/hiveeyes/saraswati>`_ and
 the Python package is published to `PyPI <https://pypi.org/project/saraswati/>`_.
 You might also want to have a look at the `documentation <https://hiveeyes.org/docs/saraswati/>`_.
 
-The software has been tested on Python 3.6.
+The software has been tested on Python 2.x and Python 3.x.
 
 If you'd like to contribute you're most welcome!
 Spend some time taking a look around, locate a bug, design issue or
@@ -146,5 +167,5 @@ Have fun!
 .. _GStreamer: https://gstreamer.freedesktop.org/
 .. _GStreamer Python Bindings: https://cgit.freedesktop.org/gstreamer/gst-python
 .. _PyGObject: http://pygobject.readthedocs.io/
-.. _OpenOB: https://jamesharrison.github.io/openob/
+.. _ALSA: https://alsa-project.org/
 .. _Single-board computer (SBC): https://en.wikipedia.org/wiki/Single-board_computer

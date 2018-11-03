@@ -137,14 +137,14 @@ Invoke example program `flac-timestamp-chunked.py`_::
 
 Example output when being started at 03:35 CET::
 
-    recording_2018-10-30T02:35:16+0000_0000.mkv
-    recording_2018-10-30T02:35:18+0000_0001.mkv
-    recording_2018-10-30T02:35:20+0000_0002.mkv
-    recording_2018-10-30T02:35:22+0000_0003.mkv
+    recording_2018-10-30T02:35:16+0000_0000.mka
+    recording_2018-10-30T02:35:18+0000_0001.mka
+    recording_2018-10-30T02:35:20+0000_0002.mka
+    recording_2018-10-30T02:35:22+0000_0003.mka
 
 Display segment metadata information embedded into the flile::
 
-    mkvinfo '/var/spool/saraswati/recording_2018-10-30T05:48:48+0000_0000.mkv' | grep Date
+    mkvinfo '/var/spool/saraswati/recording_2018-10-30T05:48:48+0000_0000.mka' | grep Date
     | + Date: Tue Oct 30 05:48:48 2018 UTC
 
 

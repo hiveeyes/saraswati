@@ -40,7 +40,7 @@ class BasicPipeline:
         self.mainloop = GObject.MainLoop()
 
         # Where to store the audio fragments
-        self.output_location = '/var/spool/saraswati/recording_{timestamp}_{fragment:04d}.mkv'
+        self.output_location = '/var/spool/saraswati/recording_{timestamp}_{fragment:04d}.mka'
 
     def setup(self):
 

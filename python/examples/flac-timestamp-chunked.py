@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# saraswati is a robust, multi-channel audio recording, transmission and storage system
+# Saraswati is a robust, multi-channel audio recording, transmission and storage system
 # (c) 2018 Andreas Motl <andreas@hiveeyes.org>
 import gi
 gi.require_version('Gst', '1.0')

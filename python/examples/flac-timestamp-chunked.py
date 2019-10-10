@@ -8,14 +8,16 @@ gi.require_version('Gst', '1.0')
 import sys
 import pytz
 import logging
+import threading
 from gi.repository import GObject, Gst
 from datetime import datetime
+import time
 from pkg_resources import parse_version
 
 logger = logging.getLogger(__name__)
 
 
-class BasicPipeline:
+class PipelineManager:
     """
     This implements an audio encoding GStreamer pipeline in Python similar to this one::
 
@@ -39,10 +41,27 @@ class BasicPipeline:
         # Create main event loop object
         self.mainloop = GObject.MainLoop()
 
-        # Where to store the audio fragments
-        self.output_location = '/var/spool/saraswati/recording_{timestamp}_{fragment:04d}.mka'
 
-    def setup(self):
+        # list for pipelines
+        self.pipelines = []
+
+        # list for pipeline expression
+        self.pipeline_expressions = []
+
+        # list for muxer
+        self.muxer = []
+
+
+        # Where to store the audio fragments
+        self.output_location = '/var/spool/saraswati/recording_{channel}_{timestamp}_{fragment:04d}.mka'
+
+    def add_pipe(self, audio_input, channel):
+        """
+
+        :param audio_input: audio input device, e.g. "alsasrc device="hw:1""
+        :param channel: description of channel used for file names, e.g. "channel1"
+        :return:
+        """
 
         logger.info('Configuring the pipeline')
 
@@ -53,7 +72,7 @@ class BasicPipeline:
         chunklength = 10000000000
 
         # Audio input source
-        audio_input = 'audiotestsrc'
+        #audio_input = 'audiotestsrc'
         #audio_input = 'alsasrc device="hw:1"'
 
         if audio_input == 'audiotestsrc':
@@ -62,23 +81,26 @@ class BasicPipeline:
         # Pipeline: Use FLAC encoder and Matroska container
         pipeline_expression = \
             "{audio_input} ! flacenc ! flactag ! flacparse ! " + \
-            "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time={chunklength:.0f} max-files=10"
+            "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time={chunklength:.0f} max-files=9999"
 
-        self.pipeline_expression = pipeline_expression.format(**locals())
+        self.pipeline_expressions.append(pipeline_expression.format(**locals()))
+
+
 
         # Launch pipeline
-        self.pipeline = Gst.parse_launch(self.pipeline_expression)
+        self.pipelines.append(Gst.parse_launch(self.pipeline_expressions[-1]))
 
         # Connect with bus
-        bus = self.pipeline.get_bus()
+        bus = self.pipelines[-1].get_bus()
         bus.add_signal_watch()
         bus.connect("message", self.on_message)
 
         # Compute splitmuxsink timestamp name
         # http://gstreamer-devel.966125.n4.nabble.com/splitmuxsink-timestamp-name-for-python-td4688840.html
-        self.muxer = self.pipeline.get_by_name('muxer')
-        if self.muxer:
-            user_data = {'hello': 'bob'}
+        current_muxer = self.pipelines[-1].get_by_name('muxer')
+        if current_muxer:
+            self.muxer.append(current_muxer)
+            user_data = {'channel': channel}
 
             # Dispatch name computation callback by GStreamer version
             signal_name = "format-location"
@@ -87,12 +109,13 @@ class BasicPipeline:
                 signal_name = "format-location-full"
                 signal_callback = self.on_format_location_full
 
-            self.muxer.connect(signal_name, signal_callback, user_data)
+            current_muxer.connect(signal_name, signal_callback, user_data)
 
     # Running the shit
     def run(self):
-        logger.info('Launching pipeline: %s', self.pipeline_expression)
-        self.pipeline.set_state(Gst.State.PLAYING)
+        for i, pipe in enumerate(self.pipelines):
+            logger.info('Launching pipeline: %s', self.pipeline_expressions[i])
+            pipe.set_state(Gst.State.PLAYING)
         self.mainloop.run()
 
     # Bus message handler
@@ -142,11 +165,16 @@ class BasicPipeline:
         #print('tag:', splitmux.parse_tag())
 
         # Compute current timestamp (now) in ISO format, using UTC, with timezone offset
-        timestamp_format = '%Y-%m-%dT%H:%M:%S%z'
-        now = datetime.utcnow().replace(tzinfo=pytz.utc)
-        timestamp = now.strftime(timestamp_format)
+        #timestamp_format = '%Y-%m-%dT%H:%M:%S%z'
+        #now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        #timestamp = now.strftime(timestamp_format)
 
-        location = self.output_location.format(timestamp=timestamp, fragment=fragment_id)
+        # timestamp in milliseconds for better accuracy
+        timestamp = time.time()
+        logger.info(datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f'))
+
+
+        location = self.output_location.format(timestamp=timestamp, fragment=fragment_id, channel=user_data["channel"])
         logger.info('Saving next audio fragment to "%s"', location)
         #logger.debug('splitmux: %s', splitmux)
         #logger.debug('fragment_id: %s', fragment_id)
@@ -193,6 +221,11 @@ if __name__ == '__main__':
     Gst.init(None)
 
     # Run a basic pipeline test
-    pipe = BasicPipeline()
-    pipe.setup()
-    pipe.run()
+    pm = PipelineManager()
+    pm.add_pipe('alsasrc device="hw:1"', "channel1")
+    pm.add_pipe('alsasrc device="hw:2"', "channel2")
+    pm.add_pipe('alsasrc device="hw:3"', "channel3")
+    pm.add_pipe('alsasrc device="hw:4"', "channel4")
+    pm.run()
+
+

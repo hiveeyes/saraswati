@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Saraswati is a robust, multi-channel audio recording, transmission and storage system
-# (c) 2018 Andreas Motl <andreas@hiveeyes.org>
+# (c) 2018-2021 Andreas Motl <andreas@hiveeyes.org>
 import gi
 gi.require_version('Gst', '1.0')
 
 import sys
 import pytz
 import logging
-from gi.repository import GObject, Gst
+from gi.repository import GLib, Gst
 from datetime import datetime
 from pkg_resources import parse_version
 
@@ -24,7 +24,7 @@ class BasicPipeline:
     See also:
 
     - https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html
-
+    - https://gstreamer.freedesktop.org/documentation/multifile/splitmuxsink.html
 
     It is derived from these fine blueprints:
 
@@ -37,10 +37,11 @@ class BasicPipeline:
         logger.info('Starting audio recorder')
 
         # Create main event loop object
-        self.mainloop = GObject.MainLoop()
+        self.mainloop = GLib.MainLoop()
 
         # Where to store the audio fragments
-        self.output_location = '/var/spool/saraswati/recording_{timestamp}_{fragment:04d}.mka'
+        # TODO: Make configurable.
+        self.output_location = './var/spool/recording_{timestamp}_{fragment:04d}.mka'
 
     def setup(self):
 
@@ -48,18 +49,17 @@ class BasicPipeline:
 
         # Configure audio pipeline
 
-        # How long should the audio chunks be?
-        # 10 seconds
-        chunklength = 10000000000
+        # How long (ns) should the audio chunks be?
+        # TODO: Make configurable.
+        chunklength = 10 * (1000 ** 3)  # 10 seconds
 
         # Audio input source
+        # TODO: Make configurable.
         audio_input = 'audiotestsrc'
         #audio_input = 'alsasrc device="hw:1"'
 
-        if audio_input == 'audiotestsrc':
-            chunklength *= 12.5
-
         # Pipeline: Use FLAC encoder and Matroska container
+        # TODO: Make "max-files" configurable.
         pipeline_expression = \
             "{audio_input} ! flacenc ! flactag ! flacparse ! " + \
             "muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux max-size-time={chunklength:.0f} max-files=10"
@@ -84,6 +84,7 @@ class BasicPipeline:
             signal_name = "format-location"
             signal_callback = self.on_format_location
             if parse_version(Gst.version_string()) >= parse_version('GStreamer 1.14.4'):
+                logger.info("Detected GStreamer>=1.14.4, using 'format-location-full'")
                 signal_name = "format-location-full"
                 signal_callback = self.on_format_location_full
 
@@ -175,8 +176,7 @@ class BasicPipeline:
 
 
 def setup_logging(level=logging.INFO):
-    #log_format = '%(asctime)-15s [%(name)-10s] %(levelname)-7s: %(message)s'
-    log_format = '%(asctime)-15s [%(name)s] %(levelname)-7s: %(message)s'
+    log_format = '%(asctime)-15s [%(name)-15s] %(levelname)-7s: %(message)s'
     logging.basicConfig(
         format=log_format,
         stream=sys.stderr,
@@ -189,7 +189,6 @@ if __name__ == '__main__':
     setup_logging(level=logging.DEBUG)
 
     # Setup PyGObject and GStreamer
-    GObject.threads_init()
     Gst.init(None)
 
     # Run a basic pipeline test

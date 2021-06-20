@@ -8,14 +8,15 @@ from typing import List
 
 import gi
 
-from saraswati.model import SaraswatiSettings, Pipeline
+from saraswati.model import Pipeline, SaraswatiSettings
 
-gi.require_version('Gst', '1.0')
+gi.require_version("Gst", "1.0")
+
+import logging
+from datetime import datetime
 
 import pytz
-import logging
 from gi.repository import GLib, Gst
-from datetime import datetime
 from pkg_resources import parse_version
 
 logger = logging.getLogger(__name__)
@@ -73,7 +74,9 @@ class SaraswatiRecorder:
     def print_status(self):
         logger.info(f"Spool location: {self.output_location}")
         logger.info(f"Chunk duration: {self.settings.chunk_duration} seconds")
-        logger.info(f"Maximum number of file fragments: {self.settings.chunk_max_files}")
+        logger.info(
+            f"Maximum number of file fragments: {self.settings.chunk_max_files}"
+        )
 
     def add_channel(self, name: str, source: str):
         """
@@ -91,10 +94,11 @@ class SaraswatiRecorder:
 
         # Pipeline: Use FLAC encoder and Matroska container.
         # TODO: What about `muxer.audio_1`?
-        pipeline_expression = \
-            f"{source} ! flacenc ! flactag ! flacparse ! " + \
-            f"muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux " \
+        pipeline_expression = (
+            f"{source} ! flacenc ! flactag ! flacparse ! "
+            + f"muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux "
             f"max-size-time={chunk_duration_ns:.0f} max-files={self.settings.chunk_max_files}"
+        )
 
         pipeline_gst = Gst.parse_launch(pipeline_expression)
 
@@ -109,15 +113,15 @@ class SaraswatiRecorder:
 
         # Compute splitmuxsink timestamp name
         # http://gstreamer-devel.966125.n4.nabble.com/splitmuxsink-timestamp-name-for-python-td4688840.html
-        current_muxer = pipeline.gst.get_by_name('muxer')
+        current_muxer = pipeline.gst.get_by_name("muxer")
         if current_muxer:
             self.muxer.append(current_muxer)
-            user_data = {'channel': name}
+            user_data = {"channel": name}
 
             # Dispatch name computation callback by GStreamer version
             signal_name = "format-location"
             signal_callback = self.on_format_location
-            if parse_version(Gst.version_string()) >= parse_version('GStreamer 1.14.4'):
+            if parse_version(Gst.version_string()) >= parse_version("GStreamer 1.14.4"):
                 logger.info("Detected GStreamer>=1.14.4, using 'format-location-full'")
                 signal_name = "format-location-full"
                 signal_callback = self.on_format_location_full
@@ -138,21 +142,21 @@ class SaraswatiRecorder:
         structure = message.get_structure()
         if structure is None:
             return
-        #logger.info('on_message: %s', structure.to_string())
-        #logger.debug('tag: %s', message.parse_tag())
+        # logger.info('on_message: %s', structure.to_string())
+        # logger.debug('tag: %s', message.parse_tag())
 
-        #logger.debug('message:   %s\n%s', message, dir(message))
-        #logger.debug('structure: %s\n%s', structure, dir(structure))
-        #logger.debug('timestamp: %s', message.timestamp)
+        # logger.debug('message:   %s\n%s', message, dir(message))
+        # logger.debug('structure: %s\n%s', structure, dir(structure))
+        # logger.debug('timestamp: %s', message.timestamp)
 
-        #thing = self.pipeline.get_by_name('tagger')
-        #logger.debug('thing: %s\n%s', thing, dir(thing))
-        #logger.debug('tags: %s', thing.get_tag_list())
-        #logger.debug('tags: %s', self.pipeline.get_tag_list())
-        #logger.debug('muxer tags: %s', self.muxer.get_tag_list())
+        # thing = self.pipeline.get_by_name('tagger')
+        # logger.debug('thing: %s\n%s', thing, dir(thing))
+        # logger.debug('tags: %s', thing.get_tag_list())
+        # logger.debug('tags: %s', self.pipeline.get_tag_list())
+        # logger.debug('muxer tags: %s', self.muxer.get_tag_list())
 
         if message.type == Gst.MessageType.EOS:
-            logger.info('End of stream: {}'.format(message))
+            logger.info("End of stream: {}".format(message))
             pipeline.gst.set_state(Gst.State.NULL)
 
         elif message.type == Gst.MessageType.ERROR:
@@ -174,28 +178,33 @@ class SaraswatiRecorder:
         user_data:      User data set when the signal handler was connected
         """
 
-        #logger.info('on_format_location')
-        #print('tag:', splitmux.parse_tag())
+        # logger.info('on_format_location')
+        # print('tag:', splitmux.parse_tag())
 
         # Compute current timestamp (now) in ISO format, using UTC, with timezone offset
-        #timestamp_format = '%Y-%m-%dT%H-%M-%S%z'
-        timestamp_format = '%Y%m%dT%H%M%S%z'
+        # timestamp_format = '%Y-%m-%dT%H-%M-%S%z'
+        timestamp_format = "%Y%m%dT%H%M%S%z"
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
-        #now = datetime.now().replace(tzinfo=pytz.timezone('Europe/Berlin'))
+        # now = datetime.now().replace(tzinfo=pytz.timezone('Europe/Berlin'))
         timestamp = now.strftime(timestamp_format)
 
         # Use timestamp in Epoch format, with milliseconds for better accuracy
-        #timestamp = time.time()
-        #logger.info(datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f'))
+        # timestamp = time.time()
+        # logger.info(datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f'))
 
         # Compute output location.
-        location = str(self.output_location).format(timestamp=timestamp, fragment=fragment_id, channel=user_data["channel"])
-        logger.info('Saving next audio fragment to "%s"', location.replace(str(self.settings.spool_path), "").strip("/"))
+        location = str(self.output_location).format(
+            timestamp=timestamp, fragment=fragment_id, channel=user_data["channel"]
+        )
+        logger.info(
+            'Saving next audio fragment to "%s"',
+            location.replace(str(self.settings.spool_path), "").strip("/"),
+        )
 
-        #logger.debug('splitmux: %s', splitmux)
-        #logger.debug('fragment_id: %s', fragment_id)
-        #logger.debug('first_sample: %s\n%s\n%s', first_sample, dir(first_sample), first_sample.get_info())
-        #buffer = first_sample.get_buffer()
+        # logger.debug('splitmux: %s', splitmux)
+        # logger.debug('fragment_id: %s', fragment_id)
+        # logger.debug('first_sample: %s\n%s\n%s', first_sample, dir(first_sample), first_sample.get_info())
+        # buffer = first_sample.get_buffer()
 
         # https://lazka.github.io/pgi-docs/Gst-1.0/classes/Buffer.html#Gst.Buffer.add_reference_timestamp_meta
         # https://lazka.github.io/pgi-docs/Gst-1.0/classes/ReferenceTimestampMeta.html
@@ -218,10 +227,11 @@ class SaraswatiRecorder:
         return location
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Setup logging
     from saraswati.util import setup_logging
+
     setup_logging(level=logging.DEBUG)
 
     # Run a basic pipeline test

@@ -17,5 +17,5 @@ def test_spike():
     recorder = SaraswatiRecorder(settings=settings)
 
     # Run a basic pipeline test.
-    recorder.add_channel(name="channel1", source='audiotestsrc')
-    recorder.add_channel(name="channel2", source='audiotestsrc')
+    recorder.add_channel(name="channel1", source="audiotestsrc")
+    recorder.add_channel(name="channel2", source="audiotestsrc")

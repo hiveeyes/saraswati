@@ -2,9 +2,11 @@ import imp
 
 try:
     import hashlib
+
     md = hashlib.md5
 except ImportError:
     import md5
+
     md = md5.new
 
 
@@ -16,8 +18,8 @@ def load_module_from_file(path):
     :return:
     """
     try:
-        fp = open(path, 'rb')
-        digest = md(path.encode('utf-8')).hexdigest()
+        fp = open(path, "rb")
+        digest = md(path.encode("utf-8")).hexdigest()
         return imp.load_source(digest, path, fp)
     finally:
         try:

@@ -16,5 +16,6 @@ def test_spike():
     Gst.init(None)
 
     # Run a basic pipeline test
-    pipe = spike.BasicPipeline()
-    pipe.setup()
+    pipe = spike.PipelineManager()
+    pipe.add_pipe('audiotestsrc', "channel1")
+    pipe.add_pipe('audiotestsrc', "channel2")

@@ -60,7 +60,7 @@ jobs:
     - name: Generate coverage report
       #if: matrix.python-version == '3.9'
       run: |
-        pytest --cov=python tests
+        pytest --cov=saraswati tests
         coverage xml
 
     - name: Upload coverage to Codecov

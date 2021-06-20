@@ -7,7 +7,7 @@ from tests.util import load_module_from_file
 
 def test_spike():
 
-    spike = load_module_from_file("python/examples/flac-timestamp-chunked.py")
+    spike = load_module_from_file("saraswati/recorder.py")
 
     # Setup logging
     spike.setup_logging(level=logging.DEBUG)

@@ -100,6 +100,9 @@ class SaraswatiRecorder:
             f"max-size-time={chunk_duration_ns:.0f} max-files={self.settings.chunk_max_files}"
         )
 
+        # TODO: Set `writing-app=saraswati` on `matroskamux`.
+        # https://gstreamer.freedesktop.org/documentation/matroska/matroskamux.html?gi-language=c#matroskamux:writing-app
+
         pipeline_gst = Gst.parse_launch(pipeline_expression)
 
         # Launch pipeline

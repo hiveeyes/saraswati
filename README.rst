@@ -78,9 +78,9 @@ GStreamer::
 
     apt-get install gstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
 
-Python 3.x::
+Python and tools::
 
-    apt-get install python3 python3-gst-1.0 python3-gi python3-tz
+    apt-get install python3 python3-gst-1.0 python3-gi python3-tz mkvtoolnix
 
 macOS systems
 -------------

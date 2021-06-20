@@ -1,8 +1,10 @@
 /.idea
 /.venv*
+/dist
+/var
+
 *.pyc
 __pycache__
 *.egg-info
-/var
 .coverage
 coverage.xml

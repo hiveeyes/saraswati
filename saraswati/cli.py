@@ -70,7 +70,8 @@ channels_opt = click.option(
     type=click.STRING,
     multiple=True,
     callback=validate_channel,
-    help="Define channels to record. Add multiple times to define more channels",
+    help="Define channels to record, add multiple times to define more channels. "
+         "The expression to define an audio source should be a GStreamer pipeline element syntax.",
 )
 spool_opt = click.option(
     "--spool",
@@ -103,7 +104,7 @@ def print_help(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
 
-    formatter = cloup.formatting.HelpFormatter(max_width=120)
+    formatter = cloup.formatting.HelpFormatter(max_width=80)
     cli.format_help(ctx, formatter)
     print(formatter.getvalue())
     print(HELP_EPILOGUE)

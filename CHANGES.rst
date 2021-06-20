@@ -22,6 +22,7 @@ in progress
 - Improve documentation
 - Add ``CHANGES.rst``
 - Ensure spool directory exists by automatically creating it
+- Fix selecting a custom recording location (--spool)
 
 
 2019-10-10 0.0.0

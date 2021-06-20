@@ -129,7 +129,7 @@ Each audio fragment will be timestamped with the current date/time
 information in an ISO8601-like format, using a qualified UTC offset of ``+0000``.
 
 In order to learn about the command line syntax, please invoke
-``saraswati --help``.
+``saraswati --help`` or ``saraswati record --help``.
 
 Example output when being started at 03:35 CET::
 

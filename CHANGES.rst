@@ -6,9 +6,14 @@ Saraswati changelog
 in progress
 ===========
 
+
+2021-06-20 0.2.0
+================
+
 - Adjust recording pipeline: Add ``audioconvert ! queue`` GStreamer elements after audio source
 - Improve documentation
 - Fix creating spool directory
+- Improve installation by not installing "PyGObject-stubs" at runtime
 
 
 2021-06-20 0.1.0

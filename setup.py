@@ -68,12 +68,12 @@ setup(name='saraswati',
           "click>=7.1.2,<8",
           "cloup>=0.8.0,<0.9",
           "appdirs>=1.3,<2",
-          "PyGObject-stubs==0.0.2",
       ],
       extras_require={
           "test": [
               "pytest>=4.6.7",
               "pytest-cov>=2.8.1",
+              "PyGObject-stubs==0.0.2",
           ]
       },
       tests_require=[],

@@ -1,3 +1,24 @@
+.. image:: https://github.com/hiveeyes/saraswati/workflows/Tests/badge.svg
+    :target: https://github.com/hiveeyes/saraswati/actions?workflow=Tests
+
+.. image:: https://codecov.io/gh/hiveeyes/saraswati/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/hiveeyes/saraswati
+
+.. image:: https://img.shields.io/pypi/pyversions/saraswati.svg
+    :target: https://pypi.org/project/saraswati/
+
+.. image:: https://img.shields.io/pypi/v/saraswati.svg
+    :target: https://pypi.org/project/saraswati/
+
+.. image:: https://img.shields.io/pypi/l/saraswati.svg
+    :alt: License
+    :target: https://pypi.org/project/saraswati/
+
+.. image:: https://img.shields.io/pypi/status/saraswati.svg
+    :target: https://pypi.org/project/saraswati/
+
+|
+
 #########
 Saraswati
 #########
@@ -95,21 +116,17 @@ Debian-based systems
 --------------------
 GStreamer::
 
-    apt install gstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
-
-Python 2.x::
-
-    apt install python python-gst-1.0 python-gi python-tz
+    apt-get install gstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
 
 Python 3.x::
 
-    apt install python3 python3-gst-1.0 python3-gi python3-tz
+    apt-get install python3 python3-gst-1.0 python3-gi python3-tz
 
 macOS systems
 -------------
 ::
 
-    brew install gstreamer gst-python libfft gst-plugins-base gst-plugins-good gst-libav
+    brew install gstreamer gst-python gst-libav gst-plugins-base gst-plugins-good
 
 
 *******

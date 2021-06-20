@@ -63,7 +63,12 @@ setup(name='saraswati',
       zip_safe=False,
       test_suite='tests',
       install_requires=[
-          "PyGObject-stubs==0.0.2"
+          "dataclasses; python_version<'3.7'",
+          "importlib_metadata; python_version<'3.8'",
+          "click>=7.1.2,<8",
+          "cloup>=0.8.0,<0.9",
+          "appdirs>=1.3,<2",
+          "PyGObject-stubs==0.0.2",
       ],
       extras_require={
           "test": [
@@ -74,7 +79,7 @@ setup(name='saraswati',
       tests_require=[],
       entry_points={
           'console_scripts': [
-              'saraswati = saraswati.commands:run',
+              'saraswati = saraswati.cli:cli',
           ],
       },
 )

@@ -1,21 +1,21 @@
 import logging
 
-from gi.overrides import Gst
-
-from tests.util import load_module_from_file
+from saraswati.model import SaraswatiSettings
+from saraswati.recorder import SaraswatiRecorder
+from saraswati.util import setup_logging
 
 
 def test_spike():
 
-    spike = load_module_from_file("saraswati/recorder.py")
+    # Setup logging.
+    setup_logging(level=logging.DEBUG)
 
-    # Setup logging
-    spike.setup_logging(level=logging.DEBUG)
+    # Create settings container.
+    settings = SaraswatiSettings(channels=None)
 
-    # Setup PyGObject and GStreamer
-    Gst.init(None)
+    # Create recorder.
+    recorder = SaraswatiRecorder(settings=settings)
 
-    # Run a basic pipeline test
-    pipe = spike.PipelineManager()
-    pipe.add_pipe('audiotestsrc', "channel1")
-    pipe.add_pipe('audiotestsrc', "channel2")
+    # Run a basic pipeline test.
+    recorder.add_channel(name="channel1", source='audiotestsrc')
+    recorder.add_channel(name="channel2", source='audiotestsrc')

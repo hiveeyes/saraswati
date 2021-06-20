@@ -2,6 +2,8 @@
 Saraswati backlog
 #################
 
-- [o] Make all parameters configurable
-- [o] Add command line interface
+- [x] Make all parameters configurable
+- [x] Add command line interface
 - [o] Upload files and purge from local disk
+- [o] Record for a maximum number of settings, using GSt's ``num-buffers=``
+- [o] What about `muxer.audio_1`?

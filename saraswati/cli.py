@@ -21,9 +21,13 @@ Examples:
     # Record two channels with different sine waves.
     saraswati record \\
         --channel="channel1 source=audiotestsrc wave=3 freq=200; foo=bar" \\
-        --channel="channel2 source=audiotestsrc wave=3 freq=400" \\
+        --channel="channel2 source=audiotestsrc wave=3 freq=400"
+
+    # Record to a specified location, using a different chunk duration.
+    saraswati record \\
+        --channel="testdrive source=autoaudiosrc" \\
         --chunk-duration=10 \\
-        [--spool=/var/spool/saraswati]
+        --spool=/var/spool/saraswati
     """
 
 
@@ -70,6 +74,7 @@ channels_opt = click.option(
 )
 spool_opt = click.option(
     "--spool",
+    "spool_path",
     type=click.Path(exists=True, file_okay=False, dir_okay=True, writable=True),
     help="Absolute path to the spool directory",
 )
@@ -155,7 +160,7 @@ def record(
     channels: List[Channel],
     chunk_duration: int,
     chunk_max_files: int,
-    spool: str,
+    spool_path: str,
     debug: bool,
 ):
 
@@ -164,7 +169,10 @@ def record(
 
     # Create settings container.
     settings = SaraswatiSettings(
-        channels=None, chunk_duration=chunk_duration, chunk_max_files=chunk_max_files
+        channels=None,
+        chunk_duration=chunk_duration,
+        chunk_max_files=chunk_max_files,
+        spool_path=spool_path,
     )
 
     # Ensure spool directory exists.

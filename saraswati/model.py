@@ -33,7 +33,9 @@ class SaraswatiSettings:
     upload_interval: Optional[int] = None
 
     def __post_init__(self):
-        if self.spool_path is None:
+        if self.spool_path is not None:
+            self.spool_path = Path(self.spool_path)
+        else:
             from saraswati import __appname__
 
             self.spool_path = Path(user_data_dir(__appname__, "hiveeyes")) / "spool"

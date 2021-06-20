@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 from appdirs import user_data_dir
 
@@ -24,7 +24,9 @@ class SaraswatiSettings:
 
     # Where to store the recordings.
     spool_path: Optional[Path] = None
-    spool_filename_pattern: Optional[str] = "recording_{channel}_{timestamp}_{fragment:04d}.mka"
+    spool_filename_pattern: Optional[
+        str
+    ] = "recording_{channel}_{timestamp}_{fragment:04d}.mka"
 
     # Where and how often to upload recordings.
     upload_target: Optional[str] = None
@@ -33,6 +35,7 @@ class SaraswatiSettings:
     def __post_init__(self):
         if self.spool_path is None:
             from saraswati import __appname__
+
             self.spool_path = Path(user_data_dir(__appname__, "hiveeyes")) / "spool"
 
 

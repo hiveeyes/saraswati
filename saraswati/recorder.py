@@ -95,8 +95,8 @@ class SaraswatiRecorder:
         # Pipeline: Use FLAC encoder and Matroska container.
         # TODO: What about `muxer.audio_1`?
         pipeline_expression = (
-            f"{source} ! flacenc ! flactag ! flacparse ! "
-            + f"muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux "
+            f"{source} ! audioconvert ! queue ! flacenc ! flactag ! flacparse ! "
+            f"muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux "
             f"max-size-time={chunk_duration_ns:.0f} max-files={self.settings.chunk_max_files}"
         )
 

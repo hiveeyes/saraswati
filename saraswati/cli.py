@@ -177,7 +177,7 @@ def record(
     )
 
     # Ensure spool directory exists.
-    settings.spool_path.mkdir(exist_ok=True)
+    settings.spool_path.mkdir(parents=True, exist_ok=True)
 
     # Create recorder.
     recorder = SaraswatiRecorder(settings=settings)

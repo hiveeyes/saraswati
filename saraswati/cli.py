@@ -135,6 +135,9 @@ def record(channels: List[Channel], chunk_duration: int, chunk_max_files: int, s
     # Create settings container.
     settings = SaraswatiSettings(channels=None, chunk_duration=chunk_duration, chunk_max_files=chunk_max_files)
 
+    # Ensure spool directory exists.
+    settings.spool_path.mkdir(exist_ok=True)
+
     # Create recorder.
     recorder = SaraswatiRecorder(settings=settings)
 

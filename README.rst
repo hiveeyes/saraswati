@@ -51,7 +51,7 @@ Hindu goddess of knowledge, music, art, wisdom and learning.
 Status
 ======
 
-The software was tested successfully with Python 3.x, GStreamer 1.10.4, 1.14.4
+The software was tested successfully with Python 3.7-3.9, GStreamer 1.10.4, 1.14.4,
 and 1.18.4, on both Linux and macOS.
 
 THIS IS A WORK IN PROGRESS. THERE MIGHT BE DRAGONS. YOU HAVE BEEN WARNED.
@@ -74,13 +74,13 @@ relevant packages.
 
 Debian-based systems
 --------------------
-GStreamer::
+::
 
-    apt-get install gstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
-
-Python and tools::
-
-    apt-get install python3 python3-gst-1.0 python3-gi python3-tz mkvtoolnix
+    apt-get update
+    apt-get install --yes libgstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
+    apt-get install --yes python3 python3-pip python3-gst-1.0 python3-gi python3-tz
+    apt-get install --yes alsa-utils mkvtoolnix
+    pip3 install saraswati --upgrade
 
 macOS systems
 -------------
@@ -100,10 +100,13 @@ Synchronize system time with NTP, this is important for appropriate timestamping
 Install Saraswati
 =================
 
-::
+Install ``saraswati`` package from PyPI::
 
     pip install saraswati
 
+To quickly verify the installation, invoke::
+
+    saraswati record --channel="testdrive source=autoaudiosrc"
 
 
 *****

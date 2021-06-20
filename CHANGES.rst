@@ -7,7 +7,7 @@ in progress
 ===========
 
 - Adjust recording pipeline: Add ``audioconvert ! queue`` GStreamer elements after audio source
-
+- Improve documentation
 
 2021-06-20 0.1.0
 ================

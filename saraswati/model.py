@@ -34,8 +34,6 @@ class SaraswatiSettings:
         if self.spool_path is None:
             from saraswati import __appname__
             self.spool_path = Path(user_data_dir(__appname__, "hiveeyes")) / "spool"
-            if not self.spool_path.exists():
-                raise FileNotFoundError(f"Spool directory '{self.spool_path}' does not exist")
 
 
 @dataclass

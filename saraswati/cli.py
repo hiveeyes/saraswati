@@ -148,7 +148,7 @@ def cli(ctx):
     "--chunk-duration",
     type=click.INT,
     help="Duration of each chunk file (seconds)",
-    default=60,
+    default=5 * 60,
 )
 @click.option(
     "--chunk-max-files",

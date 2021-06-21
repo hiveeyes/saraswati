@@ -150,7 +150,8 @@ class SaraswatiRecorder(threading.Thread):
         chunk_duration_ns = self.settings.chunk_duration * (1000 ** 3)
 
         # Pipeline: Use FLAC encoder and Matroska container.
-        # TODO: What about `muxer.audio_1`?
+        # TODO: What about `muxer.audio_0`?
+        #       https://stackoverflow.com/a/48061141
         # TODO: Add WavPack (wavpackenc)
         #       https://gstreamer.freedesktop.org/documentation/wavpack/wavpackenc.html
         pipeline_expression = (
@@ -161,6 +162,9 @@ class SaraswatiRecorder(threading.Thread):
 
         # TODO: Set `writing-app=saraswati` on `matroskamux`.
         # https://gstreamer.freedesktop.org/documentation/matroska/matroskamux.html?gi-language=c#matroskamux:writing-app
+        # TODO: avenc_wavpack ! wavpackparse
+        # f"{source} ! decodebin ! audioconvert ! queue ! avenc_wavpack ! wavpackparse ! "
+        # ! avenc_wavpack ! wavpackparse ! audioresample ! audioconvert !
 
         pipeline_gst = Gst.parse_launch(pipeline_expression)
 

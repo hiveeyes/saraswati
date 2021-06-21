@@ -6,6 +6,10 @@ Saraswati changelog
 in progress
 ===========
 
+
+2021-06-21 0.3.0
+================
+
 - Use 5 minutes recording chunk size as default
 - Protect against running out of disk space
 - Add uploader based on ``rsync``

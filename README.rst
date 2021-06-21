@@ -17,6 +17,9 @@
 .. image:: https://img.shields.io/pypi/status/saraswati.svg
     :target: https://pypi.org/project/saraswati/
 
+.. image:: https://img.shields.io/pypi/dm/saraswati.svg?label=PyPI%20downloads
+    :target: https://pypi.org/project/saraswati/
+
 |
 
 #########

@@ -83,14 +83,15 @@ Debian-based systems
     sudo apt-get update
     sudo apt-get install --yes libgstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
     sudo apt-get install --yes python3 python3-pip python3-gst-1.0 python3-gi python3-tz
-    sudo apt-get install --yes alsa-utils mkvtoolnix
+    sudo apt-get install --yes alsa-utils mkvtoolnix flac
     sudo pip3 install saraswati --upgrade
 
 macOS systems
 -------------
 ::
 
-    brew install gstreamer gst-python gst-libav gst-plugins-base gst-plugins-good mkvtoolnix
+    brew install gstreamer gst-python gst-libav gst-plugins-base gst-plugins-good
+    brew install mkvtoolnix flac
 
 
 Configure system
@@ -120,7 +121,6 @@ Usage
 This part of the documentation covers how to run Saraswati.
 Please read this section carefully.
 
-
 Recording audio
 ===============
 
@@ -138,20 +138,6 @@ information in an ISO8601-like format, using a qualified UTC offset of ``+0000``
 In order to learn about the command line syntax, please invoke
 ``saraswati --help`` or ``saraswati record --help``.
 
-Example output when being started at 03:35 CET::
-
-    recording_channel1_20210620T122642+0000_0000.mka
-    recording_channel1_20210620T122652+0000_0001.mka
-    recording_channel1_20210620T122702+0000_0002.mka
-    recording_channel1_20210620T122712+0000_0003.mka
-    recording_channel1_20210620T122722+0000_0004.mka
-
-Display segment metadata information embedded into the file::
-
-    mkvinfo var/spool/recording_channel1_20210620T122642+0000_0065.mka  | grep -E 'Date|duration'
-    | + Date: Sun Jun 20 12:26:42 2021 UTC
-    |  + Default duration: 00:00:00.104489796 (9.570 frames/fields per second for a video track)
-
 
 Uploading audio
 ===============
@@ -163,6 +149,44 @@ its spool directory to an rsync target. By default, it will do this each
 Please note ``rsync`` will be invoked using the ``--remove-source-files``
 option. So, after successful upload, the spooled files on the local machine
 will get purged.
+
+
+Example
+=======
+
+Invoke::
+
+    saraswati record --channel="testdrive source=autoaudiosrc"
+
+This will yield audio fragments in chunks worth of 5 minutes each::
+
+    recording_testdrive_20210621T155817+0000_0000.mka
+    recording_testdrive_20210621T160317+0000_0001.mka
+    recording_testdrive_20210621T160817+0000_0002.mka
+    recording_testdrive_20210621T161317+0000_0003.mka
+    recording_testdrive_20210621T161817+0000_0004.mka
+
+Display segment metadata information embedded into the Matroska container file::
+
+    mkvinfo recording_testdrive_20210620T122642+0000_0065.mka | grep -E 'Codec|Date|duration'
+    | + Date: Sun Jun 20 12:26:42 2021 UTC
+    |  + Default duration: 00:00:00.104489796 (9.570 frames/fields per second for a video track)
+    |  + Codec ID: A_FLAC
+
+Extract audio track::
+
+    mkvextract recording_testdrive_20210621T155817+0000_0000.mka tracks 0:audio_20210621T155817.flac
+    flac --decode audio_20210621T155817.flac
+
+    file recording_testdrive_20210621T155817+0000_0000.mka
+    Matroska data
+
+    file audio_20210621T155817.flac
+    FLAC audio bitstream data, 16 bit, mono, 48 kHz, length unknown
+
+    file audio_20210621T155817.wav
+    RIFF (little-endian) data, WAVE audio, Microsoft PCM, 16 bit, mono 48000 Hz
+
 
 
 *******************

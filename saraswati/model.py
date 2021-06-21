@@ -19,7 +19,7 @@ class SaraswatiSettings:
     channels: List[Channel]
 
     # Chunking options.
-    chunk_duration: Optional[int] = 10
+    chunk_duration: Optional[int] = 5 * 60
     chunk_max_files: Optional[int] = 9999
 
     # Where to store the recordings.

@@ -6,6 +6,8 @@ Saraswati changelog
 in progress
 ===========
 
+- Use 5 minutes recording chunk size as default
+
 
 2021-06-20 0.2.0
 ================

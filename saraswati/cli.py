@@ -71,7 +71,7 @@ channels_opt = click.option(
     multiple=True,
     callback=validate_channel,
     help="Define channels to record, add multiple times to define more channels. "
-         "The expression to define an audio source should be a GStreamer pipeline element syntax.",
+    "The expression to define an audio source should be a GStreamer pipeline element syntax.",
 )
 spool_opt = click.option(
     "--spool",
@@ -187,4 +187,5 @@ def record(
         recorder.add_channel(name=channel.name, source=channel.source)
 
     # Invoke recording pipelines.
-    recorder.run()
+    recorder.start()
+    recorder.record()

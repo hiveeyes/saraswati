@@ -3,6 +3,7 @@
 # Saraswati is a robust, multi-channel audio recording, transmission and storage system
 # (c) 2018-2021 Andreas Motl <andreas@hiveeyes.org>
 # (c) 2019 Diren Senger <diren@diren.de>
+import threading
 from functools import partial
 from typing import List
 
@@ -22,7 +23,7 @@ from pkg_resources import parse_version
 logger = logging.getLogger(__name__)
 
 
-class SaraswatiRecorder:
+class SaraswatiRecorder(threading.Thread):
     """
     This implements an audio encoding GStreamer pipeline in Python similar to this one::
 
@@ -41,6 +42,8 @@ class SaraswatiRecorder:
 
     def __init__(self, settings: SaraswatiSettings):
 
+        super().__init__()
+
         logger.info("Setting up audio recorder")
 
         self.settings = settings
@@ -54,15 +57,37 @@ class SaraswatiRecorder:
         # list for muxer
         self.muxer = []
 
-        self.setup()
-        self.print_status()
-
-    def setup(self):
         # Setup PyGObject and GStreamer
         Gst.init(None)
 
         # Create main event loop object
         self.mainloop = GLib.MainLoop()
+
+        self.print_status()
+
+    # Invoke the pipeline.
+    def run(self):
+        logger.info("Starting audio recorder")
+        self.mainloop.run()
+
+    def record(self):
+        try:
+            self.play()
+        except Exception as ex:
+            logger.error(f"Recording suspended: {ex}")
+        finally:
+            GLib.timeout_add_seconds(self.SERVICE_TASK_INTERVAL, self.record)
+
+    def play(self):
+        success = False
+        for i, pipeline in enumerate(self.pipelines):
+            (outcome, state, pending) = pipeline.gst.get_state(timeout=Gst.SECOND)
+            if state != Gst.State.PLAYING:
+                logger.info(f"Starting pipeline: {pipeline}")
+                pipeline.gst.set_state(Gst.State.PLAYING)
+                success = True
+        if success:
+            logger.info("Started recording")
 
     @property
     def output_location(self):
@@ -130,14 +155,6 @@ class SaraswatiRecorder:
                 signal_callback = self.on_format_location_full
 
             current_muxer.connect(signal_name, signal_callback, user_data)
-
-    # Running the shit
-    def run(self):
-        logger.info("Starting audio recorder")
-        for i, pipeline in enumerate(self.pipelines):
-            logger.info(f"Starting pipeline: {pipeline}")
-            pipeline.gst.set_state(Gst.State.PLAYING)
-        self.mainloop.run()
 
     # Bus message handler
     def on_message(self, pipeline: Pipeline, bus, message):

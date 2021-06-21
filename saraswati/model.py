@@ -23,7 +23,7 @@ class SaraswatiSettings:
     chunk_max_files: Optional[int] = 9999
 
     # Where to store the recordings.
-    spool_path: Optional[Path] = None
+    spool_path: Optional[str] = None
     spool_filename_pattern: Optional[
         str
     ] = "recording_{channel}_{timestamp}_{fragment:04d}.mka"

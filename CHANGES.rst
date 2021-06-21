@@ -6,6 +6,8 @@ Saraswati changelog
 in progress
 ===========
 
+- Add guidelines for running Saraswati on Docker
+
 
 2021-06-21 0.3.0
 ================

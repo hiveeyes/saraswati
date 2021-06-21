@@ -16,3 +16,16 @@ Clone source repository
 
     # Invoke test suite
     make test
+
+
+Using Docker for development
+============================
+
+This will give you a Linux environment, even on non-Linux workstations.
+
+::
+
+    docker build --file=dockerfiles/develop.Dockerfile --tag=saraswati-develop .
+    docker run -it --rm --volume=$PWD:/src saraswati-develop bash
+    pip3 install --editable=/src
+    saraswati record --channel="testdrive source=audiotestsrc wave=3 freq=200"

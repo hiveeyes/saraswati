@@ -5,7 +5,6 @@ import subprocess
 import sys
 import threading
 import time
-from io import BufferedWriter
 
 import teetime
 
@@ -49,7 +48,7 @@ class SaraswatiUploader(threading.Thread):
             except:
                 logger.exception("Error while uploading")
             logger.info(
-                f"The next upload will be in {self.settings.upload_interval} seconds"
+                f"The next upload will happen in {self.settings.upload_interval} seconds"
             )
             time.sleep(self.settings.upload_interval)
 

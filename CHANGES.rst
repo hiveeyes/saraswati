@@ -14,7 +14,7 @@ in progress
 
 - Use 5 minutes recording chunk size as default
 - Protect against running out of disk space
-- Add uploader based on ``rsync``
+- Add uploader based on ``rsync``. Thanks Roh and Diren!
 
 
 2021-06-20 0.2.0
@@ -23,7 +23,7 @@ in progress
 - Adjust recording pipeline: Add ``audioconvert ! queue`` GStreamer elements after audio source
 - Improve documentation
 - Fix creating spool directory
-- Improve installation by not installing "PyGObject-stubs" at runtime
+- Improve installation convenience by not depending on ``PyGObject-stubs`` at runtime
 
 
 2021-06-20 0.1.0

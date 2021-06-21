@@ -68,6 +68,7 @@ setup(name='saraswati',
           "click>=7.1.2,<8",
           "cloup>=0.8.0,<0.9",
           "appdirs>=1.3,<2",
+          "teetime>=0.0.3,<0.1",
       ],
       extras_require={
           "test": [

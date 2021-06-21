@@ -30,8 +30,10 @@ class SaraswatiUploader(threading.Thread):
         self.settings = settings
 
     def start(self):
+
         if self.settings.upload_target is None:
             logger.info("No upload target, skipping uploader")
+            return
 
         if not self.settings.upload_target.startswith("rsync://"):
             message = f"Unknown upload target protocol: {self.settings.upload_target}"

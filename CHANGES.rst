@@ -6,7 +6,12 @@ Saraswati changelog
 in progress
 ===========
 
+
+2021-06-21 0.3.1
+================
+
 - Add guidelines for running Saraswati on Docker
+- Fix program flow when no ``--upload`` option is given
 
 
 2021-06-21 0.3.0

@@ -8,7 +8,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 
 setup(name='saraswati',
-      version='0.3.1',
+      version='0.3.2',
       description='Saraswati - a robust, multi-channel audio recording, transmission and storage system',
       long_description=README,
       license="AGPL 3, EUPL 1.2",

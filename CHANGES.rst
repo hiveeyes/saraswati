@@ -7,6 +7,7 @@ in progress
 ===========
 
 - Use 5 minutes recording chunk size as default
+- Protect against running out of disk space
 
 
 2021-06-20 0.2.0

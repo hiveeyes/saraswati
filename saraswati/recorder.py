@@ -217,6 +217,10 @@ class SaraswatiRecorder(threading.Thread):
             logger.info("End of stream: {}".format(message))
             pipeline.gst.set_state(Gst.State.NULL)
 
+        elif message.type == Gst.MessageType.WARNING:
+            err, debug = message.parse_warning()
+            logger.warning("Pipeline warning: {} ({})".format(err, debug))
+
         elif message.type == Gst.MessageType.ERROR:
             err, debug = message.parse_error()
             logger.error("Pipeline error: {} ({})".format(err, debug))

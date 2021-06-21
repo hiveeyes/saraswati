@@ -7,6 +7,12 @@ in progress
 ===========
 
 
+2021-06-21 0.3.2
+================
+
+- Improve logging: Emit ``Gst.MessageType.WARNING`` messages from GStreamer pipelines
+
+
 2021-06-21 0.3.1
 ================
 

@@ -3,6 +3,7 @@
 # Saraswati is a robust, multi-channel audio recording, transmission and storage system
 # (c) 2018-2021 Andreas Motl <andreas@hiveeyes.org>
 # (c) 2019 Diren Senger <diren@diren.de>
+import shutil
 import threading
 from functools import partial
 from typing import List
@@ -40,6 +41,12 @@ class SaraswatiRecorder(threading.Thread):
 
     """
 
+    # How often to check for disk usage (seconds).
+    SERVICE_TASK_INTERVAL = 60
+
+    # How much disk space should be free to sustain recording.
+    DISK_SPACE_MINIMUM_THRESHOLD = 0.1
+
     def __init__(self, settings: SaraswatiSettings):
 
         super().__init__()
@@ -68,13 +75,19 @@ class SaraswatiRecorder(threading.Thread):
     # Invoke the pipeline.
     def run(self):
         logger.info("Starting audio recorder")
+        # GLib.idle_add(self.service_idle)
         self.mainloop.run()
+
+    def service_idle(self):
+        logger.info("Service idle")
 
     def record(self):
         try:
+            self.check_disk_usage()
             self.play()
         except Exception as ex:
             logger.error(f"Recording suspended: {ex}")
+            self.stop()
         finally:
             GLib.timeout_add_seconds(self.SERVICE_TASK_INTERVAL, self.record)
 
@@ -88,6 +101,25 @@ class SaraswatiRecorder(threading.Thread):
                 success = True
         if success:
             logger.info("Started recording")
+
+    def stop(self):
+        # https://www.programcreek.com/python/example/69113/gi.repository.GLib.MainLoop
+        success = False
+        for i, pipeline in enumerate(self.pipelines):
+            (outcome, state, pending) = pipeline.gst.get_state(timeout=Gst.SECOND)
+            if state == Gst.State.PLAYING:
+                logger.info(f"Stopping pipeline: {pipeline}")
+                pipeline.gst.set_state(Gst.State.NULL)
+                success = True
+        if success:
+            logger.info("Stopped recording")
+
+    def check_disk_usage(self):
+        usage = shutil.disk_usage(self.settings.spool_path)
+        if usage.free / usage.total < self.DISK_SPACE_MINIMUM_THRESHOLD:
+            raise ResourceWarning(
+                f"Disk space minimum threshold {self.DISK_SPACE_MINIMUM_THRESHOLD * 100}% reached"
+            )
 
     @property
     def output_location(self):

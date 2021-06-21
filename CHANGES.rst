@@ -7,6 +7,7 @@ in progress
 ===========
 
 - Add guidelines for running Saraswati on Docker
+- Unlock WavPack codec for recorder
 
 
 2021-06-21 0.3.0

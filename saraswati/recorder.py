@@ -155,7 +155,9 @@ class SaraswatiRecorder(threading.Thread):
         # TODO: Add WavPack (wavpackenc)
         #       https://gstreamer.freedesktop.org/documentation/wavpack/wavpackenc.html
         pipeline_expression = (
-            f"{source} ! audioconvert ! queue ! flacenc ! flactag ! flacparse ! "
+            # TODO: Make "codec" configurable.
+            #f"{source} ! audioconvert ! queue ! flacenc ! flactag ! flacparse ! "
+            f"{source} ! audioconvert ! queue ! wavpackenc ! "  # ! wavpackparse
             f"muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux "
             f"max-size-time={chunk_duration_ns:.0f} max-files={self.settings.chunk_max_files}"
         )
@@ -216,6 +218,10 @@ class SaraswatiRecorder(threading.Thread):
         if message.type == Gst.MessageType.EOS:
             logger.info("End of stream: {}".format(message))
             pipeline.gst.set_state(Gst.State.NULL)
+
+        elif message.type == Gst.MessageType.WARNING:
+            err, debug = message.parse_warning()
+            logger.warning("Pipeline warning: {} ({})".format(err, debug))
 
         elif message.type == Gst.MessageType.ERROR:
             err, debug = message.parse_error()

@@ -83,7 +83,7 @@ Debian-based systems
     sudo apt-get update
     sudo apt-get install --yes libgstreamer1.0 gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
     sudo apt-get install --yes python3 python3-pip python3-gst-1.0 python3-gi python3-tz
-    sudo apt-get install --yes alsa-utils mkvtoolnix flac
+    sudo apt-get install --yes alsa-utils mkvtoolnix flac wavpack
     sudo pip3 install saraswati --upgrade
 
 macOS systems
@@ -91,7 +91,7 @@ macOS systems
 ::
 
     brew install gstreamer gst-python gst-libav gst-plugins-base gst-plugins-good
-    brew install mkvtoolnix flac
+    brew install mkvtoolnix flac wavpack
 
 
 Configure system

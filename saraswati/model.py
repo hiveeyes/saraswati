@@ -30,7 +30,7 @@ class SaraswatiSettings:
 
     # Where and how often to upload recordings.
     upload_target: Optional[str] = None
-    upload_interval: Optional[int] = None
+    upload_interval: Optional[int] = 5 * 60
 
     def __post_init__(self):
         if self.spool_path is not None:

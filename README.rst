@@ -150,6 +150,17 @@ Display segment metadata information embedded into the file::
     |  + Default duration: 00:00:00.104489796 (9.570 frames/fields per second for a video track)
 
 
+Uploading audio
+===============
+
+When the ``--upload=`` option is given, Saraswati will attempt to upload
+its spool directory to an rsync target. By default, it will do this each
+5 minutes.
+
+Please note ``rsync`` will be invoked using the ``--remove-source-files``
+option. So, after successful upload, the spooled files on the local machine
+will get purged.
+
 
 *******************
 Project information

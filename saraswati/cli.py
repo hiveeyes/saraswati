@@ -8,6 +8,7 @@ from cloup import Context
 from saraswati import __appname__, __version__
 from saraswati.model import Channel, SaraswatiSettings
 from saraswati.recorder import SaraswatiRecorder
+from saraswati.uploader import SaraswatiUploader
 from saraswati.util import setup_logging
 
 appname = f"{__appname__} {__version__}"
@@ -17,6 +18,11 @@ Examples:
 
     # Record a single channel from the built-in microphone.
     saraswati record --channel="testdrive source=autoaudiosrc"
+
+    # Record a single channel and upload via rsync.
+    saraswati record \\
+        --channel="testdrive source=autoaudiosrc" \\
+        --upload="rsync://foobar@daq.example.org:/var/spool/saraswati/testdrive/wp0Kel53aw/area-42/audionode-01"
 
     # Record two channels with different sine waves.
     saraswati record \\
@@ -78,6 +84,20 @@ spool_opt = click.option(
     "spool_path",
     type=click.Path(exists=True, file_okay=False, dir_okay=True, writable=True),
     help="Absolute path to the spool directory",
+)
+upload_target_opt = click.option(
+    "--upload",
+    "-u",
+    "upload_target",
+    type=click.STRING,
+    help="Define upload target. Currently, only rsync-based upload is implemented.",
+)
+upload_interval_opt = click.option(
+    "--upload-interval",
+    "upload_interval",
+    type=click.INT,
+    help="Pause between uploads (seconds)",
+    default=5 * 60,
 )
 debug_opt = click.option("--debug", is_flag=True, help="Turn on debug mode")
 
@@ -156,12 +176,16 @@ def cli(ctx):
     help="Maximum number of file fragments",
     default=9999,
 )
+@upload_target_opt
+@upload_interval_opt
 @debug_opt
 def record(
     channels: List[Channel],
     chunk_duration: int,
     chunk_max_files: int,
     spool_path: str,
+    upload_target: str,
+    upload_interval: int,
     debug: bool,
 ):
 
@@ -174,6 +198,8 @@ def record(
         chunk_duration=chunk_duration,
         chunk_max_files=chunk_max_files,
         spool_path=spool_path,
+        upload_target=upload_target,
+        upload_interval=upload_interval,
     )
 
     # Ensure spool directory exists.
@@ -189,3 +215,7 @@ def record(
     # Invoke recording pipelines.
     recorder.start()
     recorder.record()
+
+    # Create uploader.
+    uploader = SaraswatiUploader(settings=settings)
+    uploader.start()

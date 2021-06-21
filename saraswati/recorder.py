@@ -151,6 +151,8 @@ class SaraswatiRecorder(threading.Thread):
 
         # Pipeline: Use FLAC encoder and Matroska container.
         # TODO: What about `muxer.audio_1`?
+        # TODO: Add WavPack (wavpackenc)
+        #       https://gstreamer.freedesktop.org/documentation/wavpack/wavpackenc.html
         pipeline_expression = (
             f"{source} ! audioconvert ! queue ! flacenc ! flactag ! flacparse ! "
             f"muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux "

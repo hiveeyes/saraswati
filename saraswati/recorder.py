@@ -42,7 +42,7 @@ class SaraswatiRecorder(threading.Thread):
     """
 
     # How often to check for disk usage (seconds).
-    SERVICE_TASK_INTERVAL = 60
+    SERVICE_TASK_INTERVAL = 10
 
     # How much disk space should be free to sustain recording.
     DISK_SPACE_MINIMUM_THRESHOLD = 0.1

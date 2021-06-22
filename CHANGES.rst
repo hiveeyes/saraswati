@@ -7,6 +7,12 @@ in progress
 ===========
 
 
+2021-06-22 0.4.2
+================
+
+- Improve user creation and production setup documentation
+
+
 2021-06-22 0.4.1
 ================
 

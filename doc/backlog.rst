@@ -12,6 +12,8 @@ Prio 1
 - [x] Upload files and purge from local disk
 - [x] Run as system daemon by using a systemd unit file
 - [o] Remove testaudio60.wav
+- [o] Reflect the timestamp in folder names
+      - https://community.hiveeyes.org/t/installation-von-saraswati-auf-einem-industrie-pc-mit-upload-auf-synology-nas/4048/18
 - [o] Improve documentation re. disk storage
 - [o] Document how to use a RAM disk for buffering
 - [o] Document advanced SSH configuration (private key, port number) and write about

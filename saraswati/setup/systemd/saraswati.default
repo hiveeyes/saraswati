@@ -12,6 +12,8 @@
 # SARASWATI_CHANNEL_2='channel2 source=alsasrc device="hw:1"'
 # SARASWATI_CHANNEL_3='channel3 source=alsasrc device="hw:2"'
 # SARASWATI_CHANNEL_4='channel4 source=alsasrc device="hw:3"'
+# SARASWATI_CHANNEL_5="channel5 source=pulsesrc device=alsa_input.usb-0c76_USB_Audio_Device-00.mono-fallback"
+# SARASWATI_CHANNEL_6="channel6 source=pulsesrc device=alsa_input.usb-MUSIC-BOOST_USB_Microphone_MB-306-00.multichannel-input"
 
 # Use sine wave generators
 # SARASWATI_CHANNEL_10="testdrive1 source=audiotestsrc wave=3 freq=200"

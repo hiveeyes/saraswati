@@ -5,9 +5,13 @@ import pkg_resources
 
 def run():
 
+    # Reset setup.
+    os.system("systemctl stop saraswati")
+    os.system("userdel saraswati")
+
     # Create user.
     os.system("groupadd --system saraswati >/dev/null 2>&1")
-    os.system("useradd --system --gid saraswati saraswati >/dev/null 2>&1")
+    os.system("useradd --system --create-home --shell /bin/bash --gid saraswati saraswati >/dev/null 2>&1")
 
     # Add user to "audio" group.
     os.system("usermod --append --groups audio saraswati")

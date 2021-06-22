@@ -93,6 +93,12 @@ class SaraswatiRecorder(threading.Thread):
 
     def play(self):
         success = False
+
+        # TODO: Should this yield an error/exception?
+        if not self.pipelines:
+            logger.warning("No audio pipelines defined")
+            return
+
         for i, pipeline in enumerate(self.pipelines):
             (outcome, state, pending) = pipeline.gst.get_state(timeout=Gst.SECOND)
             if state != Gst.State.PLAYING:

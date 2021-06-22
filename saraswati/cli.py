@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import List
 
 import click
@@ -82,6 +83,7 @@ channels_opt = click.option(
 spool_opt = click.option(
     "--spool",
     "spool_path",
+    envvar="SPOOL_PATH",
     type=click.Path(exists=True, file_okay=False, dir_okay=True, writable=True),
     help="Absolute path to the spool directory",
 )
@@ -89,17 +91,21 @@ upload_target_opt = click.option(
     "--upload",
     "-u",
     "upload_target",
+    envvar="UPLOAD_TARGET",
     type=click.STRING,
     help="Define upload target. Currently, only rsync-based upload is implemented.",
 )
 upload_interval_opt = click.option(
     "--upload-interval",
     "upload_interval",
+    envvar="UPLOAD_INTERVAL",
     type=click.INT,
     help="Pause between uploads (seconds)",
     default=5 * 60,
 )
-debug_opt = click.option("--debug", is_flag=True, help="Turn on debug mode")
+verbose_opt = click.option(
+    "--verbose", envvar="VERBOSE", is_flag=True, help="Turn on verbose mode"
+)
 
 
 def print_version(ctx, param, value):
@@ -133,6 +139,7 @@ def print_help(ctx, param, value):
 
 CONTEXT_SETTINGS = Context.settings(
     max_content_width=180,
+    auto_envvar_prefix="SARASWATI",
 )
 
 
@@ -161,24 +168,28 @@ def cli(ctx):
         print_help(ctx, None, "--help")
 
 
-@cli.command("record")
+@cli.command(
+    "record", context_settings=Context.settings(auto_envvar_prefix="SARASWATI")
+)
 @channels_opt
 @spool_opt
 @click.option(
     "--chunk-duration",
+    envvar="CHUNK_DURATION",
     type=click.INT,
     help="Duration of each chunk file (seconds)",
     default=5 * 60,
 )
 @click.option(
     "--chunk-max-files",
+    envvar="CHUNK_MAX_FILES",
     type=click.INT,
     help="Maximum number of file fragments",
     default=9999,
 )
 @upload_target_opt
 @upload_interval_opt
-@debug_opt
+@verbose_opt
 def record(
     channels: List[Channel],
     chunk_duration: int,
@@ -186,11 +197,19 @@ def record(
     spool_path: str,
     upload_target: str,
     upload_interval: int,
-    debug: bool,
+    verbose: bool,
 ):
 
     # Setup logging
     setup_logging(level=logging.DEBUG)
+
+    # Add channels from environment variables.
+    # TODO: Discuss priority / collision handling with channels from command line options.
+    environment_channels = []
+    for key in os.environ.keys():
+        if key.startswith("SARASWATI_CHANNEL_"):
+            environment_channels.append(os.environ[key])
+    channels += validate_channel(None, None, environment_channels)
 
     # Create settings container.
     settings = SaraswatiSettings(
@@ -209,6 +228,8 @@ def record(
     recorder = SaraswatiRecorder(settings=settings)
 
     # autoaudiosrc, osxaudiosrc, audiotestsrc wave=3 freq=200, alsasrc device="hw:1"
+
+    # Add channels from both command line options and environment variables.
     for channel in channels:
         recorder.add_channel(name=channel.name, source=channel.source)
 
@@ -219,3 +240,14 @@ def record(
     # Create uploader.
     uploader = SaraswatiUploader(settings=settings)
     uploader.start()
+
+
+@cli.command("setup")
+@click.option("--systemd", is_flag=True, help="Install as systemd unit")
+def setup(systemd: bool):
+    if systemd:
+        import saraswati.setup.systemd
+
+        saraswati.setup.systemd.run()
+    else:
+        raise click.MissingParameter(message="Currently, only --systemd is implemented")

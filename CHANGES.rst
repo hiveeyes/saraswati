@@ -7,6 +7,13 @@ in progress
 ===========
 
 
+2021-06-22 0.4.0
+================
+
+- Prepare Saraswati to run as system service. There is now a corresponding
+  command ``sudo saraswati setup --systemd`` which aids this.
+
+
 2021-06-21 0.3.2
 ================
 

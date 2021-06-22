@@ -26,7 +26,7 @@ class SaraswatiSettings:
     spool_path: Optional[str] = None
     spool_filename_pattern: Optional[
         str
-    ] = "recording_{channel}_{timestamp}_{fragment:04d}.mka"
+    ] = "{channel}_{timestamp}_{fragment:04d}.mka"
 
     # Where and how often to upload recordings.
     upload_target: Optional[str] = None

@@ -26,7 +26,7 @@ class SaraswatiUploader(threading.Thread):
 
     def __init__(self, settings: SaraswatiSettings):
         super().__init__()
-        logger.info("Setting up uploader")
+        logger.info("Initializing uploader")
         self.settings = settings
 
     def start(self):
@@ -98,7 +98,9 @@ rsync
             )
             rsyncer.wait(timeout=300)
 
-            if rsyncer.returncode != 0:
+            if rsyncer.returncode == 0:
+                logger.info("Upload succeeded")
+            else:
                 buffer_stderr.seek(0)
                 stderr = buffer_stderr.read().decode()
                 message = f"Rsync command failed: {stderr}"

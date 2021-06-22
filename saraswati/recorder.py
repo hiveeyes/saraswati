@@ -51,7 +51,7 @@ class SaraswatiRecorder(threading.Thread):
 
         super().__init__()
 
-        logger.info("Setting up audio recorder")
+        logger.info("Initializing audio recorder")
 
         self.settings = settings
 

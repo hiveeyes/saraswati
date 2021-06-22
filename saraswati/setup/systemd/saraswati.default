@@ -7,10 +7,17 @@
 
 # Define audio channels
 
-# SARASWATI_CHANNEL_1="channel1 source=audiotestsrc wave=3 freq=200"
-# SARASWATI_CHANNEL_2="channel2 source=audiotestsrc wave=3 freq=400"
-# SARASWATI_CHANNEL_3="channel3 source=audiotestsrc wave=3 freq=600"
-# SARASWATI_CHANNEL_4="channel4 source=audiotestsrc wave=3 freq=800"
+# Use real hardware devices
+# SARASWATI_CHANNEL_1='channel1 source=alsasrc device="hw:0"'
+# SARASWATI_CHANNEL_2='channel2 source=alsasrc device="hw:1"'
+# SARASWATI_CHANNEL_3='channel3 source=alsasrc device="hw:2"'
+# SARASWATI_CHANNEL_4='channel4 source=alsasrc device="hw:3"'
+
+# Use sine wave generators
+# SARASWATI_CHANNEL_10="testdrive1 source=audiotestsrc wave=3 freq=200"
+# SARASWATI_CHANNEL_11="testdrive2 source=audiotestsrc wave=3 freq=400"
+# SARASWATI_CHANNEL_12="testdrive3 source=audiotestsrc wave=3 freq=600"
+# SARASWATI_CHANNEL_13="testdrive4 source=audiotestsrc wave=3 freq=800"
 
 # Configure spool directory
 SARASWATI_SPOOL_PATH=/var/spool/saraswati

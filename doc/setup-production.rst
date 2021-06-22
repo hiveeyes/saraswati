@@ -51,8 +51,15 @@ service using ``systemctl restart saraswati``.
 
 Adding channels will look like::
 
+    # Use real hardware devices
+    # SARASWATI_CHANNEL_1='channel1 source=alsasrc device="hw:0"'
+
+    # Use sine wave generators
     SARASWATI_CHANNEL_1="channel1 source=audiotestsrc wave=3 freq=200"
     SARASWATI_CHANNEL_2="channel2 source=audiotestsrc wave=3 freq=400"
 
 Please note that the suffix to the variable name, ``_1``, ``_2``, will have no
 semantic meaning. It is just to tell different ``CHANNEL`` options apart.
+
+In order to find out about hardware devices available to GStreamer, you
+might want to invoke ``gst-device-monitor-1.0`` and inspect its output.

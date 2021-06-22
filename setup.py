@@ -59,6 +59,10 @@ setup(name='saraswati',
       packages=find_packages(),
       include_package_data=True,
       package_data={
+        'saraswati': [
+            '*.default',
+            '*.service',
+        ],
       },
       zip_safe=False,
       test_suite='tests',

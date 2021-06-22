@@ -1,5 +1,5 @@
 include setup.cfg *.txt *.rst *.md
 exclude .bumpversion.cfg requirements-*.txt
-recursive-include saraswati *.ini *.py
+recursive-include saraswati *.ini *.py *.default *.service
 prune examples
 prune tests

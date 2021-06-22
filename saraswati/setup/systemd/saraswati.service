@@ -1,0 +1,17 @@
+[Unit]
+Description=Saraswati multi-channel audio recording system
+Documentation=https://github.com/hiveeyes/saraswati
+After=network.target
+
+[Service]
+User=saraswati
+Group=saraswati
+LimitNOFILE=65536
+EnvironmentFile=-/etc/default/saraswati
+ExecStart=/bin/sh -c "/usr/local/bin/saraswati record"
+KillMode=control-group
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=saraswati.service

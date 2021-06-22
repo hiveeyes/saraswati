@@ -1,0 +1,23 @@
+# ============================
+# Saraswati configuration file
+# ============================
+
+# Location: /etc/default/saraswati
+
+
+# Define audio channels
+
+# SARASWATI_CHANNEL_1="channel1 source=audiotestsrc wave=3 freq=200"
+# SARASWATI_CHANNEL_2="channel2 source=audiotestsrc wave=3 freq=400"
+# SARASWATI_CHANNEL_3="channel3 source=audiotestsrc wave=3 freq=600"
+# SARASWATI_CHANNEL_4="channel4 source=audiotestsrc wave=3 freq=800"
+
+# Configure spool directory
+SARASWATI_SPOOL_PATH=/var/spool/saraswati
+
+# Configure chunking
+# SARASWATI_CHUNK_DURATION=300
+
+# Configure rsync upload
+# SARASWATI_UPLOAD_TARGET="rsync://foobar@daq.example.org:/var/spool/saraswati/testdrive/wp0Kel53aw/area-42/audionode-01"
+# SARASWATI_UPLOAD_INTERVAL=300

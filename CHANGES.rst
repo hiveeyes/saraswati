@@ -7,6 +7,7 @@ in progress
 ===========
 
 - Run recorder service task (checking for free disk space) each 10 seconds
+- Improve production setup documentation
 
 
 2021-06-22 0.4.2

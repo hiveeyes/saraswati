@@ -31,15 +31,9 @@ Saraswati
 About
 *****
 
-Saraswati is a robust, multi-channel audio recording,
-transmission and storage system.
-
-The software is based on GStreamer_ and the `GStreamer Python Bindings`_, in
-turn using the fine PyGObject_ under the hood. It is designed to run on
-`Single-board computer (SBC)`_ systems as well as larger machines.
-
-The system might become the designated work horse for flexible field recording
-of audio signals in environmental monitoring systems.
+Saraswati is a robust, multi-channel audio recording, transmission and storage
+system. The system is designed for flexible field recording of audio signals in
+environmental monitoring systems.
 
 Saraswati is developed by an independent community of scientists from different
 domains working collaboratively on this project. You are welcome to join our
@@ -51,23 +45,31 @@ Etymology
 `Saraswati <https://en.wikipedia.org/wiki/Saraswati>`_ is the
 Hindu goddess of knowledge, music, art, wisdom and learning.
 
+Technologies
+============
+
+The software is based on GStreamer_ and the `GStreamer Python Bindings`_, in
+turn using the fine PyGObject_ under the hood. It is designed to run on
+`Single-board computer (SBC)`_ systems as well as larger machines.
+
 Status
 ======
 
 The software was tested successfully with Python 3.7-3.9, GStreamer 1.10.4,
-1.14.4, 1.16.2 and 1.18.4, on both Linux (Debian 10.x buster, Linux Mint 20.2)
-and macOS (Catalina 10.15.7).
-
-THIS IS A WORK IN PROGRESS. THERE MIGHT BE DRAGONS. YOU HAVE BEEN WARNED.
+1.14.4, 1.16.2 and 1.18.4, on both Linux (Debian 10 buster, Debian 11 bullseye,
+Linux Mint 20.2) and macOS (Catalina 10.15.7).
 
 
 *****
 Setup
 *****
 
-This part of the documentation covers the installation of Saraswati.
+This part of the documentation covers the basic installation of Saraswati.
 The first step to using any software package is getting it properly installed.
 Please read this section carefully.
+
+When aiming to run Saraswati autonomously in a production setup, please also
+consider reading the documentation about `running Saraswati in production`_.
 
 
 Install prerequisites
@@ -117,8 +119,12 @@ To quickly verify the installation, invoke::
 Usage
 *****
 
-This part of the documentation covers how to run Saraswati.
+This part of the documentation covers how to run Saraswati interactively.
 Please read this section carefully.
+
+When aiming to run Saraswati autonomously in a production setup, please also
+consider reading the documentation about `running Saraswati in production`_.
+
 
 Recording audio
 ===============
@@ -206,9 +212,6 @@ development project `Hiveeyes`_. See also:
 - `Uni Bremen und Hiveeyes werden als Citizen-Science-Projekte vom Forschungsministerium unterstützt <https://community.hiveeyes.org/t/bee-observer-bob-uni-bremen-und-hiveeyes-werden-als-citizen-science-projekte-vom-forschungsministerium-unterstutzt/454>`_
 - `System für kontinuierliche Audio-Aufzeichnung (BOB Projekt, Phase 1) <https://community.hiveeyes.org/t/system-fur-kontinuierliche-audio-aufzeichnung-bob-projekt-phase-1/728>`_
 
-.. _Cognitive neuroinformatics group at the University of Bremen: http://www.cognitive-neuroinformatics.com/en/
-.. _Hiveeyes: https://hiveeyes.org/
-
 
 Details
 =======
@@ -230,7 +233,6 @@ Code license
 
 The code is licensed under the GNU AGPL license. See LICENSE_ file for details.
 
-.. _LICENSE: https://github.com/hiveeyes/saraswati/blob/master/LICENSE
 
 
 ----
@@ -238,9 +240,13 @@ The code is licensed under the GNU AGPL license. See LICENSE_ file for details.
 Have fun!
 
 
+.. _ALSA: https://alsa-project.org/
+.. _Cognitive neuroinformatics group at the University of Bremen: http://www.cognitive-neuroinformatics.com/en/
+.. _flac-timestamp-chunked.py: https://github.com/hiveeyes/saraswati/blob/master/python/examples/flac-timestamp-chunked.py
 .. _GStreamer: https://gstreamer.freedesktop.org/
 .. _GStreamer Python Bindings: https://cgit.freedesktop.org/gstreamer/gst-python
+.. _Hiveeyes: https://hiveeyes.org/
+.. _LICENSE: https://github.com/hiveeyes/saraswati/blob/master/LICENSE
 .. _PyGObject: http://pygobject.readthedocs.io/
-.. _ALSA: https://alsa-project.org/
+.. _running Saraswati in production: https://github.com/hiveeyes/saraswati/blob/main/doc/setup-production.rst
 .. _Single-board computer (SBC): https://en.wikipedia.org/wiki/Single-board_computer
-.. _flac-timestamp-chunked.py: https://github.com/hiveeyes/saraswati/blob/master/python/examples/flac-timestamp-chunked.py

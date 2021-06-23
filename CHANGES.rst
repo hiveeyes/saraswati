@@ -9,6 +9,9 @@ in progress
 - Run recorder service task (checking for free disk space) each 10 seconds
 - Improve production setup documentation
 - Remove ``recording_`` prefix from recorded file name. Thanks, Weef.
+- Improve spool subdirectory hierarchy to reduce the number of files per directory. Thanks, Michael.
+  The new scheme is ``/var/spool/saraswati/{year}/{month:02d}/{day:02d}/{channel}/{timestamp}_{channel}_{fragment:04d}.mka``.
+
 
 
 2021-06-22 0.4.2

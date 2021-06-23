@@ -65,6 +65,7 @@ class SaraswatiUploader(threading.Thread):
 find "{self.settings.spool_path}" -type f 
     -not -newermt '-{self.PICKUP_AGE_THRESHOLD} seconds' 
     -exec basename {{}} \;""".strip()
+    -printf "%P\\n"
 
             # Command for uploading selected files.
             # TODO: Starting with `rsync 3.2.3` (6 Aug 2020), there will be the `--mkpath` option.

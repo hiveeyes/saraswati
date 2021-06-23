@@ -262,12 +262,21 @@ class SaraswatiRecorder(threading.Thread):
 
         # Compute output location.
         location = str(self.output_location).format(
-            timestamp=timestamp, fragment=fragment_id, channel=user_data["channel"]
+            year=now.year,
+            month=now.month,
+            day=now.day,
+            channel=user_data["channel"],
+            timestamp=timestamp,
+            fragment=fragment_id,
         )
         logger.info(
             'Saving next audio fragment to "%s"',
             location.replace(str(self.settings.spool_path), "").strip("/"),
         )
+
+        # Create directory.
+        location_path = Path(location).parent
+        location_path.mkdir(parents=True, exist_ok=True)
 
         # logger.debug('splitmux: %s', splitmux)
         # logger.debug('fragment_id: %s', fragment_id)

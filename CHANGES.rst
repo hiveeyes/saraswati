@@ -6,6 +6,8 @@ Saraswati changelog
 in progress
 ===========
 
+- Don't automatically start tailing the log file after "saraswati setup"
+
 
 2021-06-23 0.5.0
 ================

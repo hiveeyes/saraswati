@@ -50,6 +50,6 @@ def run():
     print("Saraswati service started successfully")
     print()
 
-    print("Start watching logfile using 'journalctl --unit=saraswati --follow'")
-    print()
-    os.system("journalctl --unit=saraswati --follow")
+    # print("Start watching logfile using 'journalctl --unit=saraswati --follow'")
+    # print()
+    # os.system("journalctl --unit=saraswati --follow")

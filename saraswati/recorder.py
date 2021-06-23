@@ -109,12 +109,12 @@ class SaraswatiRecorder(threading.Thread):
         if success:
             logger.info("Started recording")
 
-    def stop(self):
+    def stop(self, force=False):
         # https://www.programcreek.com/python/example/69113/gi.repository.GLib.MainLoop
         success = False
         for i, pipeline in enumerate(self.pipelines):
             (outcome, state, pending) = pipeline.gst.get_state(timeout=Gst.SECOND)
-            if state == Gst.State.PLAYING:
+            if force or state == Gst.State.PLAYING:
                 logger.info(f"Stopping pipeline: {pipeline}")
                 pipeline.gst.set_state(Gst.State.NULL)
                 success = True
@@ -193,7 +193,7 @@ class SaraswatiRecorder(threading.Thread):
 
             # Dispatch name computation callback by GStreamer version
             signal_name = "format-location"
-            signal_callback = self.on_format_location
+            signal_callback = self.on_format_location_standard
             if parse_version(Gst.version_string()) >= parse_version("GStreamer 1.14.4"):
                 logger.info("Detected GStreamer>=1.14.4, using 'format-location-full'")
                 signal_name = "format-location-full"
@@ -231,12 +231,26 @@ class SaraswatiRecorder(threading.Thread):
         elif message.type == Gst.MessageType.ERROR:
             err, debug = message.parse_error()
             logger.error("Pipeline error: {} ({})".format(err, debug))
-            pipeline.gst.set_state(Gst.State.NULL)
+            # Might run into an endless loop because this state change will
+            # re-trigger an error event on Gst.
+            # pipeline.gst.set_state(Gst.State.NULL)
+
+    def on_format_location_standard(self, splitmux, fragment_id, user_data):
+        try:
+            return self.on_format_location_real(splitmux, fragment_id, user_data)
+        except Exception as ex:
+            logger.exception("Error in pipeline callback")
+            self.stop(force=True)
 
     def on_format_location_full(self, splitmux, fragment_id, first_sample, user_data):
-        return self.on_format_location(splitmux, fragment_id, user_data)
+        try:
+            return self.on_format_location_real(splitmux, fragment_id, user_data)
+        except Exception as ex:
+            logger.exception("Error in pipeline callback")
+            self.stop(force=True)
 
-    def on_format_location(self, splitmux, fragment_id, user_data):
+    def on_format_location_real(self, splitmux, fragment_id, user_data):
+
         """
         Callback for computing the output filename
         https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good/html/gst-plugins-good-plugins-splitmuxsink.html#GstSplitMuxSink-format-location-full

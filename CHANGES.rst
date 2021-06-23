@@ -13,6 +13,7 @@ in progress
   The new scheme is ``/var/spool/saraswati/{year}/{month:02d}/{day:02d}/{channel}/{timestamp}_{channel}_{fragment:04d}.mka``.
 - Use more ISO-like timestamp format, separating each datetime's fragments.
   Currently, ``%Y-%m-%dT%H-%M-%S%z`` is used.
+- Improve error handling on exceptions from "on_format_location" callbacks
 
 
 2021-06-22 0.4.2

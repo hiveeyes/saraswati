@@ -137,13 +137,20 @@ be configured like::
 Prepare SSH connection
 ----------------------
 
-For the next steps, please make sure you are impersonated as user ``saraswati``::
+For all of the next steps within this section, please make sure you are
+impersonated as user ``saraswati``::
 
     sudo su - saraswati
 
 Generate a SSH keypair to authenticate with the upload server::
 
     ssh-keygen -t ed25519
+
+Then, append the public key, ``~/.ssh/id_ed25519.pub``, to the
+``/home/foobar/.ssh/authorized_key`` file on the remote file archive server.
+You can either do this manually or use the ``ssh-copy-id`` program, like::
+
+    ssh-copy-id foobar@daq.example.org
 
 If you need to configure another SSH private key for the connection or want
 to adjust the TCP port the remote SSH server is listening on, please edit
@@ -202,6 +209,32 @@ or::
     gst-resource-error-quark: Could not open file "/path/to/spool/2021/06/23/testdrive/20210623T002844+0000_testdrive_0000.mka" for writing. (6)
     (gstfilesink.c(473): gst_file_sink_open_file (): /GstPipeline:pipeline0/GstSplitMuxSink:muxer/GstFileSink:sink: system error: Bad file descriptor)
 
+Solution: Invoke ``mkdir -p /path/to/spool``.
+
 or::
 
     gst_parse_error: no element "flacenc" (1)
+
+
+Networking errors
+=================
+
+When trying to upload files to a remote server, ``rsync`` will need a valid SSH
+connection. On this matter, a variety of errors might happen. For example::
+
+    [saraswati.uploader] ERROR  : Rsync command failed: ssh: Could not resolve hostname daq.example.org: Name or service not known
+
+Solution: Make sure to configure ``--upload`` or ``SARASWATI_UPLOAD_TARGET`` appropriately.
+
+or::
+
+    [saraswati.uploader] ERROR  : Rsync command failed: Host key verification failed.
+
+Solution: On the audio acquisition system, invoke ``ssh foobar@daq.example.org -o StrictHostKeyChecking=accept-new``
+to make sure the SSH connection to the remote server works.
+
+or::
+
+    [saraswati.uploader] ERROR  : Rsync command failed: rsync: change_dir#3 "/tmp/saraswati/testdrive/wp0Kel53aw/area-42" failed: No such file or directory (2)
+
+Solution: On the remote server, invoke ``mkdir -p /tmp/saraswati/testdrive/wp0Kel53aw/area-42``.

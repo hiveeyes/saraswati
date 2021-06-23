@@ -62,10 +62,11 @@ class SaraswatiUploader(threading.Thread):
 
             # Only use files which recently have not been written to.
             find = f"""
-find "{self.settings.spool_path}" -type f 
-    -not -newermt '-{self.PICKUP_AGE_THRESHOLD} seconds' 
-    -exec basename {{}} \;""".strip()
+find "{self.settings.spool_path}"
+    -type f
+    -not -newermt "-{self.PICKUP_AGE_THRESHOLD} seconds"
     -printf "%P\\n"
+            """.strip()
 
             # Command for uploading selected files.
             # TODO: Starting with `rsync 3.2.3` (6 Aug 2020), there will be the `--mkpath` option.
@@ -76,7 +77,8 @@ rsync
     --remove-source-files --files-from=- 
     --bwlimit={self.BANDWIDTH_MAX} --timeout={self.IO_TIMEOUT} 
     "{self.settings.spool_path}" 
-    {target}""".strip()
+    "{target}"
+            """.strip()
 
             # Reporting.
             logger.debug(f"Invoking command:\n{find}\n|\n{rsync}")

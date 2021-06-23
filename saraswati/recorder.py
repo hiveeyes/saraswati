@@ -266,7 +266,7 @@ class SaraswatiRecorder(threading.Thread):
 
         # Compute current timestamp (now) in ISO format, using UTC, with timezone offset
         # TODO: Refactor to `model.py` / make it configurable.
-        #timestamp_format = "%Y-%m-%dT%H:%M:%S%z"
+        # timestamp_format = "%Y-%m-%dT%H:%M:%S%z"
         timestamp_format = "%Y-%m-%dT%H-%M-%S%z"
         # timestamp_format = "%Y%m%dT%H%M%S%z"
         now = datetime.utcnow().replace(tzinfo=pytz.utc)

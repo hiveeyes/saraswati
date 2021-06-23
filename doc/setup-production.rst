@@ -235,6 +235,7 @@ to make sure the SSH connection to the remote server works.
 
 or::
 
-    [saraswati.uploader] ERROR  : Rsync command failed: rsync: change_dir#3 "/tmp/saraswati/testdrive/wp0Kel53aw/area-42" failed: No such file or directory (2)
+    [saraswati.uploader] ERROR  : Rsync command failed: rsync: change_dir#3 "/var/archive/saraswati/testdrive/wp0Kel53aw/area-42" failed: No such file or directory (2)
 
-Solution: On the remote server, invoke ``mkdir -p /tmp/saraswati/testdrive/wp0Kel53aw/area-42``.
+Solution: On the remote server, invoke ``mkdir -p /var/archive/saraswati/testdrive/wp0Kel53aw/area-42``
+and make sure the user ``foobar`` has appropriate permissions to write into this directory.

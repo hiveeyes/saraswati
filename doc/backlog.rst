@@ -12,6 +12,7 @@ Prio 1
 - [o] What about ``muxer.audio_1``?
 - [o] Record for a maximum number of seconds, using GSt's ``num-buffers=``
 - [o] On Docker, ``Recording suspended: Disk space minimum threshold 10.0% reached`` is quickly reached
+- [o] Add upload option using FTP
 
 
 ******

@@ -183,16 +183,24 @@ On a macOS system, please navigate to "System Preferences » Security & Privacy
 » Privacy". There, when selecting "Microphone" on the left hand side, make sure
 "Terminal" or "iTerm" is permitted access on the right hand side.
 
-Hardware access or codec errors
-===============================
+Errors from GStreamer
+=====================
+
+GStreamer will signal any errors on audio hardware access, file system access,
+or codec and other pipeline errors using an message event system.
 
 Please watch out for GStreamer pipeline errors or warnings in the log output,
 those will indicate any problems pretty verbosely, like::
 
-    [saraswati.recorder]
-    WARNING: Pipeline warning: gst-resource-error-quark:
-    Could not open audio device for recording. Device is being used by another application. (4)
+    [saraswati.recorder] WARNING: Pipeline warning:
+    gst-resource-error-quark: Could not open audio device for recording. Device is being used by another application. (4)
     (gstalsasrc.c(743): gst_alsasrc_open (): /GstAlsaSrc:autoaudiosrc0-actual-src-als: Device 'default' is busy)
+
+or::
+
+    [saraswati.recorder] ERROR  : Pipeline error:
+    gst-resource-error-quark: Could not open file "/path/to/spool/2021/06/23/testdrive/20210623T002844+0000_testdrive_0000.mka" for writing. (6)
+    (gstfilesink.c(473): gst_file_sink_open_file (): /GstPipeline:pipeline0/GstSplitMuxSink:muxer/GstFileSink:sink: system error: Bad file descriptor)
 
 or::
 

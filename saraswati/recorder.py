@@ -6,6 +6,7 @@
 import shutil
 import threading
 from functools import partial
+from pathlib import Path
 from typing import List
 
 import gi
@@ -250,8 +251,10 @@ class SaraswatiRecorder(threading.Thread):
         # print('tag:', splitmux.parse_tag())
 
         # Compute current timestamp (now) in ISO format, using UTC, with timezone offset
-        # timestamp_format = '%Y-%m-%dT%H-%M-%S%z'
-        timestamp_format = "%Y%m%dT%H%M%S%z"
+        # TODO: Refactor to `model.py` / make it configurable.
+        #timestamp_format = "%Y-%m-%dT%H:%M:%S%z"
+        timestamp_format = "%Y-%m-%dT%H-%M-%S%z"
+        # timestamp_format = "%Y%m%dT%H%M%S%z"
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
         # now = datetime.now().replace(tzinfo=pytz.timezone('Europe/Berlin'))
         timestamp = now.strftime(timestamp_format)

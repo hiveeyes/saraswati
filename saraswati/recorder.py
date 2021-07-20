@@ -161,9 +161,16 @@ class SaraswatiRecorder(threading.Thread):
         #       https://stackoverflow.com/a/48061141
         # TODO: Add WavPack (wavpackenc)
         #       https://gstreamer.freedesktop.org/documentation/wavpack/wavpackenc.html
+
+        muxer = None
+        if self.settings.container_format == "matroska":
+            muxer = "matroskamux"
+        elif self.settings.container_format == "ogg":
+            muxer = "oggmux"
+
         pipeline_expression = (
             f"{source} ! audioconvert ! queue ! flacenc ! flactag ! flacparse ! "
-            f"muxer.audio_0 splitmuxsink name=muxer muxer=matroskamux "
+            f"muxer.audio_%u splitmuxsink name=muxer muxer={muxer} "
             f"max-size-time={chunk_duration_ns:.0f} max-files={self.settings.chunk_max_files}"
         )
 
@@ -277,6 +284,13 @@ class SaraswatiRecorder(threading.Thread):
         # timestamp = time.time()
         # logger.info(datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f'))
 
+        # Compute container file suffix.
+        suffix = None
+        if self.settings.container_format == "matroska":
+            suffix = "mka"
+        elif self.settings.container_format == "ogg":
+            suffix = "ogg"
+
         # Compute output location.
         location = str(self.output_location).format(
             year=now.year,
@@ -285,6 +299,7 @@ class SaraswatiRecorder(threading.Thread):
             channel=user_data["channel"],
             timestamp=timestamp,
             fragment=fragment_id,
+            suffix=suffix,
         )
         logger.info(
             'Saving next audio fragment to "%s"',

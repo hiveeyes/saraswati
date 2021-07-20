@@ -80,6 +80,15 @@ channels_opt = click.option(
     help="Define channels to record, add multiple times to define more channels. "
     "The expression to define an audio source should be a GStreamer pipeline element syntax.",
 )
+container_opt = click.option(
+    "--container-format",
+    "-cf",
+    "container_format",
+    envvar="CONTAINER_FORMAT",
+    type=click.Choice(["matroska", "ogg"]),
+    default="matroska",
+    help="""Set container format. Use either "matroska" (default) or "ogg".""",
+)
 spool_opt = click.option(
     "--spool",
     "spool_path",
@@ -172,6 +181,7 @@ def cli(ctx):
     "record", context_settings=Context.settings(auto_envvar_prefix="SARASWATI")
 )
 @channels_opt
+@container_opt
 @spool_opt
 @click.option(
     "--chunk-duration",
@@ -194,6 +204,7 @@ def record(
     channels: List[Channel],
     chunk_duration: int,
     chunk_max_files: int,
+    container_format: str,
     spool_path: str,
     upload_target: str,
     upload_interval: int,
@@ -216,6 +227,7 @@ def record(
         channels=None,
         chunk_duration=chunk_duration,
         chunk_max_files=chunk_max_files,
+        container_format=container_format,
         spool_path=spool_path,
         upload_target=upload_target,
         upload_interval=upload_interval,

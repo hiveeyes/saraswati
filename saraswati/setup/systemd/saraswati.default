@@ -21,6 +21,10 @@
 # SARASWATI_CHANNEL_12="testdrive3 source=audiotestsrc wave=3 freq=600"
 # SARASWATI_CHANNEL_13="testdrive4 source=audiotestsrc wave=3 freq=800"
 
+# Configure audio recording container
+# SARASWATI_CONTAINER_FORMAT=matroska
+# SARASWATI_CONTAINER_FORMAT=ogg
+
 # Configure spool directory
 SARASWATI_SPOOL_PATH=/var/spool/saraswati
 

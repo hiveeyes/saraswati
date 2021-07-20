@@ -22,11 +22,14 @@ class SaraswatiSettings:
     chunk_duration: Optional[int] = 5 * 60
     chunk_max_files: Optional[int] = 9999
 
+    # How to encode the audio.
+    container_format: str = "matroska"  # ogg, matroska
+
     # Where to store the recordings.
     spool_path: Optional[str] = None
     spool_filename_pattern: Optional[
         str
-    ] = "{year}/{month:02d}/{day:02d}/{channel}/{timestamp}_{channel}_{fragment:04d}.mka"
+    ] = "{year}/{month:02d}/{day:02d}/{channel}/{timestamp}_{channel}_{fragment:04d}.{suffix}"
 
     # Where and how often to upload recordings.
     upload_target: Optional[str] = None

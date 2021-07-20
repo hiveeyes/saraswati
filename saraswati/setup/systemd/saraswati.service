@@ -1,7 +1,6 @@
 [Unit]
 Description=Saraswati multi-channel audio recording system
 Documentation=https://github.com/hiveeyes/saraswati
-After=network.target
 
 [Service]
 User=saraswati

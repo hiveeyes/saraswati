@@ -1,0 +1,9 @@
+# https://superuser.com/questions/1322777/in-systemd-service-file-how-do-i-say-after-usb-is-ready
+# https://www.freedesktop.org/software/systemd/man/systemd.path.html
+
+[Unit]
+Description=Saraswati multi-channel audio recording system
+Documentation=https://github.com/hiveeyes/saraswati
+
+[Path]
+DirectoryNotEmpty=/dev/bus/usb

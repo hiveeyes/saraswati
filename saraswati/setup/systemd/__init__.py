@@ -37,17 +37,20 @@ def run():
         )
         os.system(f"cp {defaultfile} /etc/default/saraswati")
 
-    # Copy systemd unit file. Always.
+    # Copy systemd unit and path-activation files. Always.
     unitfile = pkg_resources.resource_filename(
         "saraswati.setup.systemd", "saraswati.service"
     )
-    os.system(f"cp {unitfile} /usr/lib/systemd/system/")
+    pathfile = pkg_resources.resource_filename(
+        "saraswati.setup.systemd", "saraswati.path"
+    )
+    os.system(f"cp {unitfile} {pathfile} /usr/lib/systemd/system/")
 
     os.system(
-        "systemctl daemon-reload && systemctl enable saraswati && systemctl restart saraswati"
+        "systemctl daemon-reload && systemctl enable saraswati"
     )
     print()
-    print("Saraswati service started successfully")
+    print("Saraswati unit enabled successfully. The service will start when /dev/bus/usb is not empty.")
     print()
 
     # print("Start watching logfile using 'journalctl --unit=saraswati --follow'")

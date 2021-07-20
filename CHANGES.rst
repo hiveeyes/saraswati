@@ -7,6 +7,8 @@ in progress
 ===========
 
 - Don't automatically start tailing the log file after "saraswati setup"
+- Add systemd path-activation file in order to start the Saraswati service only
+  after all USB sound devices have been registered by watching ``/dev/bus/usb``.
 
 
 2021-06-23 0.5.0

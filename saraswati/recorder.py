@@ -163,13 +163,20 @@ class SaraswatiRecorder(threading.Thread):
         #       https://gstreamer.freedesktop.org/documentation/wavpack/wavpackenc.html
 
         muxer = None
-        if self.settings.container_format == "matroska":
+        if self.settings.output_format == "flac_matroska":
             muxer = "matroskamux"
-        elif self.settings.container_format == "ogg":
+            codec = "queue ! flacenc ! flactag ! flacparse !"
+        elif self.settings.output_format == "flac_ogg":
             muxer = "oggmux"
-
+            codec = "queue ! flacenc ! flactag ! flacparse !"
+        elif self.settings.output_format == "wav":
+            muxer = "wavmux"
+            codec = ""
+        elif self.settings.output_format == "flac":
+            muxer = "flacmux"
+            codec = ""     
         pipeline_expression = (
-            f"{source} ! audioconvert ! queue ! flacenc ! flactag ! flacparse ! "
+            f"{source} ! audioconvert ! {codec}  "
             f"muxer.audio_%u splitmuxsink name=muxer muxer={muxer} "
             f"max-size-time={chunk_duration_ns:.0f} max-files={self.settings.chunk_max_files}"
         )
@@ -286,10 +293,15 @@ class SaraswatiRecorder(threading.Thread):
 
         # Compute container file suffix.
         suffix = None
-        if self.settings.container_format == "matroska":
+        if self.settings.output_format == "flac_matroska":
             suffix = "mka"
-        elif self.settings.container_format == "ogg":
+        elif self.settings.output_format == "flac_ogg":
             suffix = "ogg"
+        elif self.settings.output_format == "wav":
+            suffix = "wav"
+        elif self.settings.output_format == "flac":
+            suffix = "flac"
+
 
         # Compute output location.
         location = str(self.output_location).format(

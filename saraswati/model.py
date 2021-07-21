@@ -23,7 +23,7 @@ class SaraswatiSettings:
     chunk_max_files: Optional[int] = 9999
 
     # How to encode the audio.
-    container_format: str = "matroska"  # ogg, matroska
+    output_format: str = "flac_matroska"  # ogg, matroska
 
     # Where to store the recordings.
     spool_path: Optional[str] = None

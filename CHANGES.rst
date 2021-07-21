@@ -13,7 +13,7 @@ in progress
 - Add systemd path-activation file in order to start the Saraswati service only
   after all USB sound devices have been registered by watching ``/dev/bus/usb``.
 - Optionally use Ogg container format for audio recordings, by using the option
-  ``--container-format=ogg`` or the ``SARASWATI_CONTAINER_FORMAT`` environment
+  ``--container-format=ogg`` or the ``SARASWATI_OUTPUT_FORMAT`` environment
   variable.
 
 

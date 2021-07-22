@@ -85,9 +85,18 @@ container_opt = click.option(
     "-cf",
     "container_format",
     envvar="CONTAINER_FORMAT",
-    type=click.Choice(["matroska", "ogg"]),
+    type=click.Choice(["matroska", "ogg", "none"]),
     default="matroska",
-    help="""Set container format. Use either "matroska" (default) or "ogg".""",
+    help="""Set container format. Use either "matroska" (default) or "ogg" or "none" for no container.""",
+)
+audio_format_opt = click.option(
+    "--audio-format",
+    "-af",
+    "audio_format",
+    envvar="AUDIO_FORMAT",
+    type=click.Choice(["flac", "wav", "wavpack"]),
+    default="flac",
+    help="""Set audio format. Use either "flac" (default), "wav" or "wavpack".""",
 )
 spool_opt = click.option(
     "--spool",
@@ -182,6 +191,7 @@ def cli(ctx):
 )
 @channels_opt
 @container_opt
+@audio_format_opt
 @spool_opt
 @click.option(
     "--chunk-duration",
@@ -205,6 +215,7 @@ def record(
     chunk_duration: int,
     chunk_max_files: int,
     container_format: str,
+    audio_format: str,
     spool_path: str,
     upload_target: str,
     upload_interval: int,
@@ -228,6 +239,7 @@ def record(
         chunk_duration=chunk_duration,
         chunk_max_files=chunk_max_files,
         container_format=container_format,
+        audio_format=audio_format,
         spool_path=spool_path,
         upload_target=upload_target,
         upload_interval=upload_interval,

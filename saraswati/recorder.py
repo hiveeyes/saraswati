@@ -162,14 +162,36 @@ class SaraswatiRecorder(threading.Thread):
         # TODO: Add WavPack (wavpackenc)
         #       https://gstreamer.freedesktop.org/documentation/wavpack/wavpackenc.html
 
-        muxer = None
-        if self.settings.container_format == "matroska":
-            muxer = "matroskamux"
-        elif self.settings.container_format == "ogg":
-            muxer = "oggmux"
+        muxer   = None
+        encoder = None
+        if self.settings.container_format == "none":
+            if self.settings.audio_format == "flac":
+                muxer = "flacenc"
+                encoder = ""
+            elif self.settings.audio_format == "wav":
+                muxer = "wavenc"
+                encoder = ""
+            elif self.settings.audio_format == "wavpack":
+                muxer = "wavpackenc"
+                encoder = ""
+
+        else:
+            if self.settings.audio_format == "flac":
+                encoder = "flacenc ! flactag ! flacparse !"
+            elif self.settings.audio_format == "wav":
+                encoder = "wavenc ! wavparse !"
+            if self.settings.audio_format == "wavpack":
+                encoder = "wavpackenc !"  
+        
+            if self.settings.container_format == "matroska":
+                muxer = "matroskamux"
+            
+            elif self.settings.container_format == "ogg":
+                muxer = "oggmux"
+            
 
         pipeline_expression = (
-            f"{source} ! audioconvert ! queue ! flacenc ! flactag ! flacparse ! "
+            f"{source} ! audioconvert ! queue ! {encoder} "
             f"muxer.audio_%u splitmuxsink name=muxer muxer={muxer} "
             f"max-size-time={chunk_duration_ns:.0f} max-files={self.settings.chunk_max_files}"
         )
@@ -286,10 +308,18 @@ class SaraswatiRecorder(threading.Thread):
 
         # Compute container file suffix.
         suffix = None
+
         if self.settings.container_format == "matroska":
             suffix = "mka"
         elif self.settings.container_format == "ogg":
             suffix = "ogg"
+        elif self.settings.container_format == "none":
+            if self.settings.audio_format == "wav":
+                suffix = "wav"
+            elif self.settings.audio_format == "flac":
+                suffix = "flac"
+            elif self.settings.audio_format == "wavpack":
+                suffix = "wv"
 
         # Compute output location.
         location = str(self.output_location).format(

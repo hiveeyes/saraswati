@@ -24,7 +24,7 @@ class SaraswatiSettings:
 
     # How to encode the audio.
     container_format: str = "matroska"  # ogg, matroska
-
+    audio_format: str = "flac"          # flac,wav,wavpack
     # Where to store the recordings.
     spool_path: Optional[str] = None
     spool_filename_pattern: Optional[

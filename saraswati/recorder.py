@@ -170,10 +170,10 @@ class SaraswatiRecorder(threading.Thread):
             muxer = "oggmux"
             codec = "queue ! flacenc ! flactag ! flacparse !"
         elif self.settings.output_format == "wav":
-            muxer = "wavmux"
+            muxer = "wavenc"
             codec = ""
         elif self.settings.output_format == "flac":
-            muxer = "flacmux"
+            muxer = "flacenc"
             codec = ""     
         pipeline_expression = (
             f"{source} ! audioconvert ! {codec}  "
